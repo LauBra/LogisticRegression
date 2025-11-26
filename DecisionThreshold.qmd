@@ -1,0 +1,61 @@
+---
+title: "2 Decision threshold"
+format: html
+---
+
+
+```{r}
+# Load necessary libraries
+library(mlbench)
+library(dplyr)
+```
+
+
+```{r}
+# Load the Pima Indians Diabetes dataset
+data("PimaIndiansDiabetes")
+```
+
+
+```{r}
+# Narrow down the dataset
+PimaIndiansDiabetes <- PimaIndiansDiabetes %>%
+  select(glucose, diabetes)
+
+# Convert the outcome variable to binary (0 = neg, 1 = pos)
+PimaIndiansDiabetes <- PimaIndiansDiabetes %>%
+  mutate(diabetes_dummy = ifelse(diabetes == "pos", 1, 0))
+
+# Fit a logistic regression model
+logistic_model <- glm(diabetes_dummy ~ glucose, data = PimaIndiansDiabetes, family = binomial)
+
+# Predict probabilities
+PimaIndiansDiabetes <- PimaIndiansDiabetes %>%
+  mutate(predicted_probability = predict(logistic_model, type = "response"))
+
+
+# Create classifications for different thresholds
+PimaIndiansDiabetes <- PimaIndiansDiabetes %>%
+  mutate(
+    class_0_5 = ifelse(predicted_probability >= 0.5, 1, 0),
+    class_0_3 = ifelse(predicted_probability >= 0.3, 1, 0),
+    class_0_7 = ifelse(predicted_probability >= 0.7, 1, 0)
+  )
+```
+
+
+What is hapenning when we increase the threshold? See how the number of correct (true y and predicted y) change!
+
+
+```{r}
+table(PimaIndiansDiabetes$diabetes_dummy, PimaIndiansDiabetes$class_0_3)
+```
+
+
+```{r}
+table(PimaIndiansDiabetes$diabetes_dummy, PimaIndiansDiabetes$class_0_5)
+```
+
+```{r}
+table(PimaIndiansDiabetes$diabetes_dummy, PimaIndiansDiabetes$class_0_7)
+```

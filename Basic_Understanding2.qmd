@@ -1,0 +1,157 @@
+---
+title: "(1a) Fitting a logistic regression model - R"
+format: html
+---
+
+
+First lets start with setting probabilities, odds and log odds and seeing how they are all related: 
+
+```{r}
+# Define the probability of success
+prob <- 0.8
+cat(sprintf("Probability: %.1f\n", prob))
+
+#Convert probability to odds
+odds <- prob / (1 - prob)
+cat(sprintf("Odds: %.1f\n", odds))
+
+#Convert odds to log-odds
+logodds <- log(odds)
+cat(sprintf("Log-Odds: %.1f\n", logodds))
+
+
+```
+Now, lets fit a logistic regression model. As we said yesterday, the learning algorithm is already coded for us! So we just have to apply the correct function. In this case we will use `glm()` and set as input parameters `family = binomial` <https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/glm>, <https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/family> which specifies implementing a logistic regression algorithm by setting the link function to __logit__ . We could have also used any of the models in `tidymodels` <https://parsnip.tidymodels.org/reference/logistic_reg.html>
+
+The data we will be using is the same as yesterday's, `PimaIndiansDiabetes`
+
+```{r}
+# Load necessary libraries
+library(mlbench)
+library(dplyr)
+```
+
+
+```{r}
+data("PimaIndiansDiabetes")
+head(PimaIndiansDiabetes)
+```
+We have lots of features/columns, so lets narrow it down to just a few 
+
+```{r}
+PimaIndiansDiabetes <- PimaIndiansDiabetes %>%
+  select(glucose, diabetes, mass, age)
+```
+
+- Outcome: "diabetes" is the target variable.Its a categorical varaible, made up of only two values, `neg` and `pos` 
+
+```{r}
+table(PimaIndiansDiabetes$diabetes)
+```
+
+
+For our first logistic regression model, we are going to just use glucose as predictor only. We can specify this in the following way: 
+
+```{r}
+
+# Fit a logistic regression model
+logistic_model <- glm(diabetes ~ glucose, data = PimaIndiansDiabetes, family = binomial)
+
+# View model summary
+summary(logistic_model)
+```
+
+What is the predictive model we have fitted? 
+
+This one!
+
+$$
+P = \frac{1}{1 + \exp\left(-\left(-5.35 + 0.0379 \cdot \text{glucose}\right)\right)}
+$$
+Where `glm()` has done all teh work for us, and identified the parameters $B_0$ and $B_1$ that best fit our dataset.These parameters are: 
+
+
+```{r}
+intercept <- coef(logistic_model)[1]
+slope <- coef(logistic_model)[2]
+
+intercept
+slope
+```
+
+With this information, we could calcluate for example, the odds of having diabetes, if $glucose = 120$
+
+```{r}
+#odds transformation
+odds <- exp(intercept + slope * 120) # Example: glucose = 120
+cat("Odds at glucose = 120:", odds, "\n")
+```
+
+Just as a side not, we want `pos` to be our predicted outcome, shpuld we  'dummify' the column so we have 0s and 1s only? Lets try and see:  
+
+```{r}
+PimaIndiansDiabetes$diabetes_dummy <- ifelse(PimaIndiansDiabetes$diabetes ==  "pos", 1, 0)
+head(PimaIndiansDiabetes$diabetes_dummy)
+```
+
+```{r}
+
+# Fit a logistic regression model
+logistic_model <- glm(diabetes_dummy ~ glucose, data = PimaIndiansDiabetes, family = binomial)
+
+# View model summary
+summary(logistic_model)
+```
+
+
+We get the same results! glm recognizes this as a category and does it for us!
+
+Now, lets make predictions. We are going to use our same dataset we used to fit our data, and see how much the predicted probabilities differ from the real/true classes. Again, we use the function `predict`.
+
+```{r}
+predictions <- predict(logistic_model, type = "response")
+```
+
+Lets add them to the dataset using `tidyverse` 
+
+```{r}
+# Add predictions to the dataset
+PimaIndiansDiabetesWithPred <- PimaIndiansDiabetes %>%
+  mutate(predicted_probability = predictions)
+
+# Preview data with predictions
+head(PimaIndiansDiabetesWithPred)
+```
+We do see a pattern right? Those with diabetes = `pos` (our 1) have higher probabilities. Lets double
+
+```{r}
+# Step 4: Visualize results
+library(ggplot2)
+
+# Plot glucose vs. predicted probability
+ggplot(PimaIndiansDiabetesWithPred, aes(x = glucose, y = diabetes_dummy)) +
+  geom_point(alpha = 0.5) +
+  geom_point(aes(x = glucose, y = predicted_probability),alpha = 0.5, colour = "red") +
+  geom_smooth(method = "glm", method.args = list(family = binomial), se = FALSE) +
+  labs(
+       x = "Glucose",
+       y = "Diabetes") +
+  theme_minimal()
+
+```
+Now build a logistic regression model with more features. Include `glucose + age + mass`. Compare predictions!
+
+```{r}
+
+# Fit a logistic regression model
+logistic_model_three <- glm(diabetes_dummy ~ glucose + age + mass, data = PimaIndiansDiabetes, family = binomial)
+
+# View model summary
+summary(logistic_model_three)
+
+#Continue!
+
+
+```
+
+Now lets do the same in python.

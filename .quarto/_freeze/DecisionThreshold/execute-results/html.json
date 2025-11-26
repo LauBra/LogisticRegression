@@ -1,0 +1,15 @@
+{
+  "hash": "f7503f5d97f0d8cfd3c435f42142f354",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"2 Decision threshold\"\nformat: html\n---\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Load necessary libraries\nlibrary(mlbench)\nlibrary(dplyr)\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\n\nAttaching package: 'dplyr'\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n```\n\n\n:::\n:::\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Load the Pima Indians Diabetes dataset\ndata(\"PimaIndiansDiabetes\")\n```\n:::\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Narrow down the dataset\nPimaIndiansDiabetes <- PimaIndiansDiabetes %>%\n  select(glucose, diabetes)\n\n# Convert the outcome variable to binary (0 = neg, 1 = pos)\nPimaIndiansDiabetes <- PimaIndiansDiabetes %>%\n  mutate(diabetes_dummy = ifelse(diabetes == \"pos\", 1, 0))\n\n# Fit a logistic regression model\nlogistic_model <- glm(diabetes_dummy ~ glucose, data = PimaIndiansDiabetes, family = binomial)\n\n# Predict probabilities\nPimaIndiansDiabetes <- PimaIndiansDiabetes %>%\n  mutate(predicted_probability = predict(logistic_model, type = \"response\"))\n\n\n# Create classifications for different thresholds\nPimaIndiansDiabetes <- PimaIndiansDiabetes %>%\n  mutate(\n    class_0_5 = ifelse(predicted_probability >= 0.5, 1, 0),\n    class_0_3 = ifelse(predicted_probability >= 0.3, 1, 0),\n    class_0_7 = ifelse(predicted_probability >= 0.7, 1, 0)\n  )\n```\n:::\n\n\n\nWhat is hapenning when we increase the threshold? See how the number of correct (true y and predicted y) change!\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntable(PimaIndiansDiabetes$diabetes_dummy, PimaIndiansDiabetes$class_0_3)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n   \n      0   1\n  0 331 169\n  1  66 202\n```\n\n\n:::\n:::\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntable(PimaIndiansDiabetes$diabetes_dummy, PimaIndiansDiabetes$class_0_5)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n   \n      0   1\n  0 443  57\n  1 138 130\n```\n\n\n:::\n:::\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ntable(PimaIndiansDiabetes$diabetes_dummy, PimaIndiansDiabetes$class_0_7)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n   \n      0   1\n  0 484  16\n  1 195  73\n```\n\n\n:::\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

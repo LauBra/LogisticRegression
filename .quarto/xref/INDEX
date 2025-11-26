@@ -1,0 +1,20 @@
+{
+  "Basic_Understanding2.qmd": {
+    "Basic_Understanding2.html": "9aa6b0ff"
+  },
+  "Basic_Understanding_Python.qmd": {
+    "Basic_Understanding_Python.html": "c8789181"
+  },
+  "DecisionThreshold.qmd": {
+    "DecisionThreshold.html": "4e0ee8f6"
+  },
+  "GradientAscent_R_Laura.qmd": {
+    "GradientAscent_R_Laura.html": "0d3842b5"
+  },
+  "Gradients.qmd": {
+    "Gradients.html": "77b89b60"
+  },
+  "LogisticRegression.qmd": {
+    "LogisticRegression.html": "e59cd7fe"
+  }
+}

@@ -1,0 +1,192 @@
+```{r}
+# Load library
+library(rgl)
+
+# Define sigmoid function
+sigmoid <- function(z) {
+  1 / (1 + exp(-z))
+}
+
+# Define log-likelihood function
+log_likelihood <- function(X, y, theta) {
+  z <- X %*% theta
+  sum(y * log(sigmoid(z)) + (1 - y) * log(1 - sigmoid(z)))
+}
+
+# Gradient ascent function with tracking
+gradient_ascent_with_tracking <- function(X, y, alpha = 0.1, iterations = 50) {
+  theta <- matrix(0, ncol = 1, nrow = ncol(X))  # Initialize parameters
+  tracked_thetas <- list(theta)  # Store theta values
+  
+  for (i in 1:iterations) {
+    z <- X %*% theta
+    gradient <- t(X) %*% (y - sigmoid(z))  # Compute gradient
+    theta <- theta + alpha * gradient      # Update parameters
+    tracked_thetas[[i + 1]] <- theta       # Store theta
+  }
+  
+  list(theta = theta, tracked_thetas = tracked_thetas)
+}
+```
+
+```{r}
+# Dataset
+X <- matrix(c(0.5, 1.5,
+              1.0, 1.0,
+              1.5, 0.5,
+              2.0, 2.0,
+              2.5, 2.5,
+              3.0, 0.5), ncol = 2, byrow = TRUE)
+
+y <- c(0, 0, 0, 1, 1, 1)  # Labels
+
+# Add intercept column to X
+X_with_intercept <- cbind(1, X)
+```
+
+```{r}
+# Perform gradient ascent and track points
+result <- gradient_ascent_with_tracking(X_with_intercept, y)
+theta_opt <- result$theta
+tracked_thetas <- result$tracked_thetas
+
+# Extract tracked theta values for plotting
+tracked_theta_1 <- sapply(tracked_thetas, function(t) t[2])
+tracked_theta_2 <- sapply(tracked_thetas, function(t) t[3])
+tracked_log_likelihood <- sapply(tracked_thetas, function(t) log_likelihood(X_with_intercept, y, t))
+
+# Generate a grid of theta values for plotting
+theta_1_vals <- seq(-2, 2, length.out = 50)
+theta_2_vals <- seq(-2, 2, length.out = 50)
+log_likelihood_vals <- matrix(0, nrow = length(theta_1_vals), ncol = length(theta_2_vals))
+
+for (i in 1:length(theta_1_vals)) {
+  for (j in 1:length(theta_2_vals)) {
+    theta <- matrix(c(0, theta_1_vals[i], theta_2_vals[j]), ncol = 1)
+    log_likelihood_vals[i, j] <- log_likelihood(X_with_intercept, y, theta)
+  }
+}
+```
+
+```{r}
+persp3d(theta_1_vals, theta_2_vals, t(log_likelihood_vals), 
+        col = "lightblue", alpha = 0.6, xlab = "Theta 1", ylab = "Theta 2", zlab = "Log-Likelihood")
+
+# Add gradient ascent path to persp3d
+points3d(tracked_theta_1, tracked_theta_2, tracked_log_likelihood, col = "red", size = 10)
+
+```
+
+```{r}
+
+### # Plot the 3D surface with gradient ascent points
+### rgl.open()
+### rgl.surface(theta_1_vals, theta_2_vals, t(log_likelihood_vals), color = "blue", alpha = 0.6)
+### 
+### # Plot gradient ascent path
+### rgl.points(tracked_theta_1, tracked_theta_2, tracked_log_likelihood, color = "red", size = 8)
+### 
+### # Add labels
+### rgl.texts3d(tracked_theta_1, tracked_theta_2, tracked_log_likelihood,
+###             text = 1:length(tracked_log_likelihood), color = "black")
+### rgl.title("Log-Likelihood Function with Gradient Ascent Path")
+### 
+### # Add axes labels
+### rgl.viewpoint(theta = 30, phi = 30)
+### rgl.axes3d()
+### rgl.bringtotop()
+
+library(rgl)
+
+# Open a new 3D device
+open3d()
+
+# 3D surface
+surface3d(
+  x = theta_1_vals,
+  y = theta_2_vals,
+  z = t(log_likelihood_vals),
+  color = "blue",
+  alpha = 0.6
+)
+
+# Gradient ascent path as points
+points3d(
+  tracked_theta_1,
+  tracked_theta_2,
+  tracked_log_likelihood,
+  color = "red",
+  size = 8
+)
+
+# Labels for each point (1, 2, 3, ...)
+text3d(
+  tracked_theta_1,
+  tracked_theta_2,
+  tracked_log_likelihood,
+  texts = 1:length(tracked_log_likelihood),
+  color = "black"
+)
+
+# Title + axis labels
+title3d(
+  main = "Log-Likelihood Function with Gradient Ascent Path",
+  xlab = expression(theta[1]),
+  ylab = expression(theta[2]),
+  zlab = "Log-likelihood"
+)
+
+# Axes and viewpoint
+axes3d()
+aspect3d(1, 1, 1)      # optional: equal aspect ratio
+rgl.viewpoint(theta = 30, phi = 30)
+rgl.bringtotop()
+
+
+```
+
+```{r}
+# Load library
+library(ggplot2)
+
+# Define sigmoid function
+sigmoid <- function(z) {
+  1 / (1 + exp(-z))
+}
+
+# Define decision boundary function
+decision_boundary <- function(beta, x_vals) {
+  -(beta[1] + beta[2] * x_vals) / beta[3]
+}
+
+# Dataset
+X <- data.frame(X1 = c(0.5, 1.0, 1.5, 2.0, 2.5, 3.0),
+                X2 = c(1.5, 1.0, 0.5, 2.0, 2.5, 0.5),
+                y = factor(c(0, 0, 0, 1, 1, 1)))  # Labels as factor
+
+# Beta combinations
+beta1 <- c(-3, 1, 1)  # Intercept = -3, Coefficients = [1, 1]
+beta2 <- c(-4, 2, 1)  # Intercept = -4, Coefficients = [2, 1]
+
+# Generate x values for plotting the decision boundaries
+x_vals <- seq(0, 4, length.out = 100)
+
+# Compute y values for both decision boundaries
+decision1 <- data.frame(X1 = x_vals, X2 = decision_boundary(beta1, x_vals), Boundary = "b = -3")
+decision2 <- data.frame(X1 = x_vals, X2 = decision_boundary(beta2, x_vals), Boundary = "b = -4")
+
+# Combine decision boundaries into one data frame
+decision_boundaries <- rbind(decision1, decision2)
+
+# Plot the data points and decision boundaries
+ggplot(data = X, aes(x = X1, y = X2, color = y)) +
+  geom_point(size = 4, shape = 19) +
+  geom_line(data = decision_boundaries, aes(x = X1, y = X2, linetype = Boundary), color = "blue", size = 1) +
+  scale_color_manual(values = c("blue", "red"), labels = c("y = 0", "y = 1")) +
+  labs(title = "Decision Boundaries for Different Betas",
+       x = "X1", y = "X2", color = "Labels", linetype = "Beta Combinations") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16),
+        legend.position = "bottom")
+
+```

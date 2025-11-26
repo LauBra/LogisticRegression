@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: fba5b1b5-b713-43ad-a43e-4859fa100ffb
+      url: 'https://rintrouob.quarto.pub/hds-msc---module-3---supervised-learning---classification---logistic-reg'

@@ -1,0 +1,182 @@
+---
+title: "3 Gradients"
+format: html
+---
+
+How are we finding the model that best fits the data? Through optimization! Here we calculate the parameters B0 and B1 using gradient descent of log-loss, gradient ascent of log likelihood and compare it with the function `glm` that already does this for us.
+
+```{r}
+# Load necessary libraries
+library(mlbench)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+
+# Load the Pima Indians Diabetes dataset
+data("PimaIndiansDiabetes")
+PimaIndiansDiabetes <- PimaIndiansDiabetes %>%
+  select(glucose, diabetes) %>%
+  mutate(diabetes_dummy = ifelse(diabetes == "pos", 1, 0))
+```
+
+```{r}
+# Data preparation
+x <- PimaIndiansDiabetes$glucose
+y <- PimaIndiansDiabetes$diabetes_dummy
+
+```
+
+```{r}
+# Sigmoid function
+sigmoid <- function(z) {
+  1 / (1 + exp(-z))
+}
+```
+
+```{r}
+# Log-loss function (for gradient descent) - coded equation from slides
+log_loss <- function(beta_0, beta_1, x, y) {
+  z <- beta_0 + beta_1 * x
+  y_pred <- sigmoid(z)
+  -sum(y * log(y_pred) + (1 - y) * log(1 - y_pred))
+}
+```
+
+```{r}
+# Log-likelihood function (for gradient ascent)
+log_likelihood <- function(beta_0, beta_1, x, y) {
+  z <- beta_0 + beta_1 * x
+  y_pred <- sigmoid(z)
+  sum(y * log(y_pred) + (1 - y) * log(1 - y_pred))
+}
+```
+
+To plot - do not need to know this!
+
+```{r}
+# Generate data
+set.seed(123)
+#x <- seq(50, 200, length.out = 100)  # glucose values
+#y_dummy <- sample(0:1, length(x), replace = TRUE)  # random dummy diabetes values
+
+# Generate a grid of beta_0 and beta_1 values
+beta_0_values <- seq(-10, 10, length.out = 50)
+beta_1_values <- seq(-1, 1, length.out = 50)
+
+# Compute log-loss and log-likelihood values
+log_loss_matrix <- outer(beta_0_values, beta_1_values, Vectorize(function(b0, b1) log_loss(b0, b1, x, y)))
+log_likelihood_matrix <- outer(beta_0_values, beta_1_values, Vectorize(function(b0, b1) log_likelihood(b0, b1, x, y)))
+
+# Plot the log-loss function
+log_loss_plot <- plot_ly(
+  x = beta_0_values, 
+  y = beta_1_values, 
+  z = log_loss_matrix, 
+  type = "surface"
+) %>%
+  layout(
+    title = "Log-Loss Function",
+    scene = list(
+      xaxis = list(title = "Beta 0"),
+      yaxis = list(title = "Beta 1"),
+      zaxis = list(title = "Log-Loss")
+    )
+)
+
+# Plot the log-likelihood function
+log_likelihood_plot <- plot_ly(
+  x = beta_0_values, 
+  y = beta_1_values, 
+  z = log_likelihood_matrix, 
+  type = "surface"
+) %>%
+  layout(
+    title = "Log-Likelihood Function",
+    scene = list(
+      xaxis = list(title = "Beta 0"),
+      yaxis = list(title = "Beta 1"),
+      zaxis = list(title = "Log-Likelihood")
+    )
+)
+
+# Display the plots
+log_loss_plot
+log_likelihood_plot
+```
+
+```{r}
+# Gradient descent implementation
+gradient_descent <- function(x, y, learning_rate, iterations) { # we can play with these two!
+  store_beta_0 <- NULL
+  store_beta_1 <- NULL
+  beta_0 <- -5  # Initialize intercept #random points! Can play around with these ones too
+  beta_1 <- 1  # Initialize slope #random points! Can play around with these ones too
+  for (i in 1:iterations) {
+    z <- beta_0 + beta_1 * x #linear regression function/logit
+    y_pred <- sigmoid(z) #logistic regression
+    grad_beta_0 <- mean(y_pred - y) #partial derivative of intercept
+    grad_beta_1 <- mean((y_pred - y) * x) #partial derivative of slope
+    beta_0 <- beta_0 - learning_rate * grad_beta_0 #gradient descent equation! Updating the points
+    beta_1 <- beta_1 - learning_rate * grad_beta_1
+    store_beta_0[i] <- beta_0
+    store_beta_1[i] <- beta_1
+  }
+  data.frame(beta_1 = store_beta_1, beta_0 = store_beta_0)
+}
+```
+
+```{r}
+gd_result <- gradient_descent(x, y, learning_rate = 0.01, iterations = 10)
+#View(gd_result)
+```
+
+Minimum point found after 1000 iterations:
+
+```{r}
+paste0("Glucose/Slope:, ", gd_result$beta_1[dim(gd_result)[2]])
+paste0("Intercept: ", gd_result$beta_0[dim(gd_result)[2]])
+```
+
+```{r}
+# Gradient ascent implementation
+gradient_ascent <- function(x, y, learning_rate, iterations) {
+  store_beta_0 <- NULL
+  store_beta_1 <- NULL
+  beta_0 <- 0  # Initialize intercept
+  beta_1 <- 0  # Initialize slope
+  for (i in 1:iterations) {
+    z <- beta_0 + beta_1 * x
+    y_pred <- sigmoid(z)
+    grad_beta_0 <- mean(y - y_pred)
+    grad_beta_1 <- mean((y - y_pred) * x)
+    beta_0 <- beta_0 + learning_rate * grad_beta_0
+    beta_1 <- beta_1 + learning_rate * grad_beta_1
+    store_beta_0[i] <- beta_0
+    store_beta_1[i] <- beta_1
+  }
+  data.frame(beta_1 = store_beta_1, beta_0 = store_beta_0)
+}
+```
+
+What do you notice as difference? The sign!
+
+```{r}
+ga_result <- gradient_ascent(x, y, learning_rate = 0.01, iterations = 10)
+View(ga_result)
+```
+
+```{r}
+paste0("Glucose/Slope:, ", ga_result$beta_1[dim(ga_result)[2]])
+paste0("Intercept: ", ga_result$beta_0[dim(ga_result)[2]])
+```
+
+If we fit the logistic regression model as before we get:
+
+```{r}
+# Fit a logistic regression model using glm
+
+dataset <- data.frame(x =x, y = y)  # random dummy diabetes values
+
+glm_model <- glm(y ~ x, data = dataset, family = binomial)
+coef(glm_model)
+```
