@@ -10,7 +10,7 @@ execute:
 
 In logistic regression, the model outputs a **probability**:
 
-$$\
+$$
 \hat{p}(x) = P(Y=1 \mid x)
 $$
 
@@ -212,10 +212,15 @@ cm <- data %>%
   conf_mat(truth = actual, estimate = predicted)
 
 cm
+
 ```
+
+
+
+
 
 ```{r}
 autoplot(cm, type = "heatmap") #what other types are there? 
+
 ```
 
-\`\`\`

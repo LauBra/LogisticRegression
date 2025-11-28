@@ -345,11 +345,11 @@ Call:  stats::glm(formula = diabetes ~ glucose, family = stats::binomial,
 
 Coefficients:
 (Intercept)      glucose  
-    5.54880     -0.03935  
+    5.16115     -0.03636  
 
 Degrees of Freedom: 613 Total (i.e. Null);  612 Residual
 Null Deviance:      793.9 
-Residual Deviance: 638.2    AIC: 642.2</code></pre>
+Residual Deviance: 650.6    AIC: 654.6</code></pre>
 </div>
 </div>
 <p>Inspect the coefficients (these are <strong>log-odds / logit</strong> coefficients):</p>
@@ -360,8 +360,8 @@ Residual Deviance: 638.2    AIC: 642.2</code></pre>
 <pre><code># A tibble: 2 × 5
   term        estimate std.error statistic  p.value
   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 (Intercept)   5.55     0.481        11.5 8.47e-31
-2 glucose      -0.0393   0.00371     -10.6 2.53e-26</code></pre>
+1 (Intercept)   5.16     0.456        11.3 1.14e-29
+2 glucose      -0.0364   0.00352     -10.3 4.49e-25</code></pre>
 </div>
 </div>
 </section><section id="making-predictions-in-a-consistent-way" class="level3"><h3 class="anchored" data-anchor-id="making-predictions-in-a-consistent-way">2.4 Making predictions in a consistent way</h3>
@@ -377,12 +377,12 @@ Residual Deviance: 638.2    AIC: 642.2</code></pre>
 <pre><code># A tibble: 6 × 6
   .pred_pos .pred_neg glucose  mass   age diabetes
       &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   
-1     0.568     0.432     148  33.6    50 pos     
-2     0.839     0.161     183  23.3    32 pos     
-3     0.264     0.736     115  35.3    29 neg     
-4     0.228     0.772     110  37.6    30 neg     
-5     0.743     0.257     168  38      34 pos     
-6     0.288     0.712     118  45.8    31 pos     </code></pre>
+1     0.721     0.279     168  38      34 pos     
+2     0.273     0.727     115  34.6    32 pos     
+3     0.359     0.641     126  39.3    27 neg     
+4     0.877     0.123     196  39.8    41 pos     
+5     0.303     0.697     119  29      29 pos     
+6     0.351     0.649     125  31.1    41 pos     </code></pre>
 </div>
 </div>
 <p>We can visualise predicted probability vs.&nbsp;glucose:</p>
