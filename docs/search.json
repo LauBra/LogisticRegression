@@ -1,112 +1,167 @@
 [
   {
-    "objectID": "logistic_regression_python.html",
-    "href": "logistic_regression_python.html",
-    "title": "(1a) Fitting a logistic regression model - Python (scikit-learn)",
+    "objectID": "decision_threshold.html",
+    "href": "decision_threshold.html",
+    "title": "(2) Decision Threshold",
     "section": "",
-    "text": "library(reticulate)\n\n# one-off setup (if you haven't done it yet)\n# install_miniconda()\n\n##conda_create(\n##  envname = \"hds-python\",\n##  python_version = \"3.11\",\n##  packages = c(\"numpy\", \"pandas\", \"matplotlib\", \"seaborn\", \"scikit-learn\")\n##)\n\nuse_condaenv(\"hds-python\", required = TRUE)\n#py_config()\n\n#conda_install(\"hds-python\", c(\"jupyter\", \"plotly\"))",
+    "text": "In logistic regression, the model outputs a probability:\n[ (x) = P(Y=1 x) ]\nBut to turn this probability into a class prediction, we must choose a:",
     "crumbs": [
       "Supervised Learning:Logistic Regression",
-      "(1a) Fitting a logistic regression model - Python (scikit-learn)"
+      "(2) Decision Threshold"
     ]
   },
   {
-    "objectID": "logistic_regression_python.html#data-pima-indians-diabetes",
-    "href": "logistic_regression_python.html#data-pima-indians-diabetes",
-    "title": "(1a) Fitting a logistic regression model - Python (scikit-learn)",
-    "section": "Data: Pima Indians Diabetes",
-    "text": "Data: Pima Indians Diabetes\n\nimport pandas as pd\n\n\nurl=\"https://raw.githubusercontent.com/npradaschnor/Pima-Indians-Diabetes-Dataset/master/diabetes.csv\"\npima= pd.read_csv(url)\n\npima = pima[[\"Glucose\", \"Outcome\", \"BloodPressure\", \"Age\"]]\npima[\"Diabetes_binary\"] = (pima[\"Outcome\"] == 1).astype(int)\npima.head()\n\n   Glucose  Outcome  BloodPressure  Age  Diabetes_binary\n0      148        1             72   50                1\n1       85        0             66   31                0\n2      183        1             64   32                1\n3       89        0             66   21                0\n4      137        1             40   33                1",
-    "crumbs": [
-      "Supervised Learning:Logistic Regression",
-      "(1a) Fitting a logistic regression model - Python (scikit-learn)"
-    ]
-  },
-  {
-    "objectID": "logistic_regression_python.html#logistic-regression-with-scikit-learn",
-    "href": "logistic_regression_python.html#logistic-regression-with-scikit-learn",
-    "title": "(1a) Fitting a logistic regression model - Python (scikit-learn)",
-    "section": "Logistic regression with scikit-learn",
-    "text": "Logistic regression with scikit-learn\n\nfrom sklearn.linear_model import LogisticRegression\n\nX = pima[[\"Glucose\"]].values\ny = pima[\"Diabetes_binary\"].values\n\nlog_reg = LogisticRegression(solver=\"lbfgs\")\nlog_reg.fit(X, y)\n\n\n\n\nLogisticRegression()\nIn a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.\n\n\nLogisticRegression\n\n?Documentation for LogisticRegressioniFitted\n\n        \n            Parameters\n\n\npenalty \n'l2'\n\n\n\ndual \nFalse\n\n\n\ntol \n0.0001\n\n\n\nC \n1.0\n\n\n\nfit_intercept \nTrue\n\n\n\nintercept_scaling \n1\n\n\n\nclass_weight \nNone\n\n\n\nrandom_state \nNone\n\n\n\nsolver \n'lbfgs'\n\n\n\nmax_iter \n100\n\n\n\nmulti_class \n'deprecated'\n\n\n\nverbose \n0\n\n\n\nwarm_start \nFalse\n\n\n\nn_jobs \nNone\n\n\n\nl1_ratio \nNone\n\n\n\n    \n\n\n\n\nlog_reg.intercept_, log_reg.coef_\n\n(array([-5.34990586]), array([[0.03787169]]))",
-    "crumbs": [
-      "Supervised Learning:Logistic Regression",
-      "(1a) Fitting a logistic regression model - Python (scikit-learn)"
-    ]
-  },
-  {
-    "objectID": "logistic_regression_python.html#predictions-plots",
-    "href": "logistic_regression_python.html#predictions-plots",
-    "title": "(1a) Fitting a logistic regression model - Python (scikit-learn)",
-    "section": "Predictions & plots",
-    "text": "Predictions & plots\n\nprobs = log_reg.predict_proba(X)\npima[\"prob_diabetes_1\"] = probs[:, 1]\npima[\"prob_diabetes_0\"] = probs[:, 0]\npima.head()\n\n   Glucose  Outcome  ...  prob_diabetes_1  prob_diabetes_0\n0      148        1  ...         0.563432         0.436568\n1       85        0  ...         0.106138         0.893862\n2      183        1  ...         0.829291         0.170709\n3       89        0  ...         0.121391         0.878609\n4      137        1  ...         0.459716         0.540284\n\n[5 rows x 7 columns]\n\n\nWhich probability column do we want?",
-    "crumbs": [
-      "Supervised Learning:Logistic Regression",
-      "(1a) Fitting a logistic regression model - Python (scikit-learn)"
-    ]
-  },
-  {
-    "objectID": "tidymodels_sklearn_overview.html",
-    "href": "tidymodels_sklearn_overview.html",
-    "title": "(0) Unified Modelling Frameworks in R & Python",
+    "objectID": "decision_threshold.html#introduction",
+    "href": "decision_threshold.html#introduction",
+    "title": "(2) Decision Threshold",
     "section": "",
-    "text": "library(reticulate)\n\n# one-off setup (if you haven't done it yet)\n# install_miniconda()\n\n##conda_create(\n##  envname = \"hds-python\",\n##  python_version = \"3.11\",\n##  packages = c(\"numpy\", \"pandas\", \"matplotlib\", \"seaborn\", \"scikit-learn\")\n##)\n\nuse_condaenv(\"hds-python\", required = TRUE)\n#py_config()\n\n#conda_install(\"hds-python\", c(\"jupyter\", \"plotly\"))",
+    "text": "In logistic regression, the model outputs a probability:\n[ (x) = P(Y=1 x) ]\nBut to turn this probability into a class prediction, we must choose a:",
     "crumbs": [
       "Supervised Learning:Logistic Regression",
-      "(0) Unified Modelling Frameworks in R & Python"
+      "(2) Decision Threshold"
     ]
   },
   {
-    "objectID": "tidymodels_sklearn_overview.html#why-frameworks-like-tidymodels-and-scikit-learn",
-    "href": "tidymodels_sklearn_overview.html#why-frameworks-like-tidymodels-and-scikit-learn",
-    "title": "(0) Unified Modelling Frameworks in R & Python",
-    "section": "1. Why frameworks like tidymodels and scikit-learn?",
-    "text": "1. Why frameworks like tidymodels and scikit-learn?\nIn both R and Python, there are many ways to fit models:\n\nR: lm(), glm(), rpart(), randomForest(), xgboost(), …\nPython: statsmodels, custom NumPy/SciPy code, or many different classes in sklearn\n\n\nEach function or class often has its own syntax, argument names and prediction methods.\nThis becomes difficult when we want to:\n\nswap one model for another,\ncompare models fairly,\nbuild end-to-end pipelines with preprocessing + model + evaluation,\ndo hyperparameter tuning cleanly and without data leakage.\n\nTwo ecosystems help us solve this:\n\n\ntidymodels in R\n\n\nscikit-learn in Python\n\nBoth provide a unified, consistent interface for models, preprocessing, pipelines and tuning.",
+    "objectID": "decision_threshold.html#load-and-prepare-the-data",
+    "href": "decision_threshold.html#load-and-prepare-the-data",
+    "title": "(2) Decision Threshold",
+    "section": "2. Load and prepare the data",
+    "text": "2. Load and prepare the data\n\nlibrary(mlbench)\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.0     ✔ tibble    3.3.0\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.2.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(tidymodels)\n\n── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──\n✔ broom        1.0.10     ✔ rsample      1.3.1 \n✔ dials        1.4.2      ✔ tailor       0.1.0 \n✔ infer        1.0.9      ✔ tune         2.0.1 \n✔ modeldata    1.5.1      ✔ workflows    1.3.0 \n✔ parsnip      1.3.3      ✔ workflowsets 1.1.1 \n✔ recipes      1.3.1      ✔ yardstick    1.3.2 \n── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──\n✖ scales::discard() masks purrr::discard()\n✖ dplyr::filter()   masks stats::filter()\n✖ recipes::fixed()  masks stringr::fixed()\n✖ dplyr::lag()      masks stats::lag()\n✖ yardstick::spec() masks readr::spec()\n✖ recipes::step()   masks stats::step()\n\ndata(\"PimaIndiansDiabetes\")\n\npima &lt;- PimaIndiansDiabetes %&gt;%\n  select(glucose, diabetes) %&gt;%\n  mutate(\n    diabetes = fct_relevel(diabetes, \"pos\"),\n    diabetes_dummy = if_else(diabetes == \"pos\", 1, 0)\n  )",
     "crumbs": [
       "Supervised Learning:Logistic Regression",
-      "(0) Unified Modelling Frameworks in R & Python"
+      "(2) Decision Threshold"
     ]
   },
   {
-    "objectID": "tidymodels_sklearn_overview.html#tidymodels-r-model-specification-engine",
-    "href": "tidymodels_sklearn_overview.html#tidymodels-r-model-specification-engine",
-    "title": "(0) Unified Modelling Frameworks in R & Python",
-    "section": "2. Tidymodels (R): model specification + engine\n",
-    "text": "2. Tidymodels (R): model specification + engine\n\n\n\n\n\n\n\nNote\n\n\n\nDocs:\n- Tidymodels homepage: https://www.tidymodels.org/\n- Getting started: https://www.tidymodels.org/start/\n- parsnip reference: https://parsnip.tidymodels.org/reference/index.html\n\n\nIn tidymodels, we separate:\n\n\nWhat kind of model we want → the specification\n\n\nHow it is implemented → the engine\n\n\n2.1 Model specification\nWe declare high-level models like this (classification / regression only, no engine yet):\n\n#R\nlibrary(tidymodels)\n\n── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──\n\n\n✔ broom        1.0.10     ✔ recipes      1.3.1 \n✔ dials        1.4.2      ✔ rsample      1.3.1 \n✔ dplyr        1.1.4      ✔ tailor       0.1.0 \n✔ ggplot2      4.0.0      ✔ tidyr        1.3.1 \n✔ infer        1.0.9      ✔ tune         2.0.1 \n✔ modeldata    1.5.1      ✔ workflows    1.3.0 \n✔ parsnip      1.3.3      ✔ workflowsets 1.1.1 \n✔ purrr        1.2.0      ✔ yardstick    1.3.2 \n\n\n── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──\n✖ purrr::discard() masks scales::discard()\n✖ dplyr::filter()  masks stats::filter()\n✖ dplyr::lag()     masks stats::lag()\n✖ recipes::step()  masks stats::step()\n\nlog_spec   &lt;- logistic_reg(mode = \"classification\")\ntree_spec  &lt;- decision_tree(mode = \"classification\")\nrf_spec    &lt;- rand_forest(mode = \"regression\")\nknn_spec   &lt;- nearest_neighbor(mode = \"classification\")\n\nlog_spec\n\nLogistic Regression Model Specification (classification)\n\nComputational engine: glm \n\ntree_spec\n\nDecision Tree Model Specification (classification)\n\nComputational engine: rpart \n\n\nThis does not fit a model yet. It just says:\n\n“I want a logistic regression classifier”\n“I want a decision tree for classification”\netc.\n2.2 Engines: how the model is actually fit\nThe engine is the backend algorithm. We choose it with set_engine():\n\n#R\nlog_spec_glm &lt;- logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glm\")      # uses base R glm() with binomial family\n\nlog_spec_glmnet &lt;- logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glmnet\")   # uses penalised regression (elastic net)\n\ntree_spec_rpart &lt;- decision_tree(mode = \"classification\") %&gt;%\n  set_engine(\"rpart\")    # uses rpart (CART)\n\nboost_spec_xgb &lt;- boost_tree(mode = \"classification\") %&gt;%\n  set_engine(\"xgboost\")  # uses xgboost library\n\nDifferent engines = different algorithms for the same kind of model.\n2.3 Fitting a logistic regression model with tidymodels\nBelow we use the Pima Indians diabetes data and compare to the glm() style you already know.\n\n#R\nlibrary(mlbench)\ndata(\"PimaIndiansDiabetes\")\n\npima &lt;- PimaIndiansDiabetes %&gt;%\n  dplyr::select(glucose, mass, age, diabetes) %&gt;%\n  # we want \"pos\" (diabetes present) as the event of interest\n  dplyr::mutate(diabetes = forcats::fct_relevel(diabetes, \"pos\")) # here we are saying that what we are trying to predict (i=our positive, 1 class is \"pos\")\n\nsplit &lt;- initial_split(pima, prop = 0.8, strata = diabetes)\npima_train &lt;- training(split)\npima_test  &lt;- testing(split)\n\n# Model spec + engine\nlogistic_spec &lt;-\n  logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glm\")   # internally: glm(..., family = binomial)\n\nFit the model using fit() with a formula interface:\n\n#R\nlogistic_fit &lt;-\n  logistic_spec %&gt;%\n  fit(diabetes ~ glucose, data = pima_train)\n\nlogistic_fit\n\nparsnip model object\n\n\nCall:  stats::glm(formula = diabetes ~ glucose, family = stats::binomial, \n    data = data)\n\nCoefficients:\n(Intercept)      glucose  \n    5.20800     -0.03666  \n\nDegrees of Freedom: 613 Total (i.e. Null);  612 Residual\nNull Deviance:      793.9 \nResidual Deviance: 654.4    AIC: 658.4\n\n\nInspect the coefficients (these are log-odds / logit coefficients):\n\n#R\ntidy(logistic_fit)\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic  p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)   5.21     0.464        11.2 3.44e-29\n2 glucose      -0.0367   0.00358     -10.2 1.34e-24\n\n\n2.4 Making predictions in a consistent way\nAll parsnip models support the same predict() interface:\n\n#R\npima_preds &lt;-\n  predict(logistic_fit, new_data = pima_test, type = \"prob\") %&gt;%\n  dplyr::bind_cols(pima_test)\n\nhead(pima_preds)\n\n# A tibble: 6 × 6\n  .pred_pos .pred_neg glucose  mass   age diabetes\n      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   \n1    0.0872     0.913      78  31      26 pos     \n2    0.882      0.118     197  30.5    53 pos     \n3    0.176      0.824     100  30      32 pos     \n4    0.285      0.715     117  34.1    38 neg     \n5    0.138      0.862      92  19.9    28 neg     \n6    0.129      0.871      90  38.2    27 pos     \n\n\nWe can visualise predicted probability vs. glucose:\n\n#R\nlibrary(ggplot2)\n\nggplot(pima_preds, aes(x = glucose, y = .pred_pos)) +\n  geom_point(alpha = 0.4) +\n  labs(\n    x = \"Glucose\",\n    y = \"Predicted probability of diabetes (pos)\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\nHere:\n\n\n.pred_pos = predicted ( P( = ) )\n\n.pred_neg (not shown here) = predicted ( P() )\n2.5 Recipes + workflows (pipelines in tidymodels)\nTidymodels also includes tools for preprocessing and pipelines:\n\n\nrecipes → scaling, imputation, one-hot encoding, etc.\n\n\nworkflows → combine a model + recipe into a single object\n\n\n#R\nlog_recipe &lt;-\n  recipe(diabetes ~ glucose + age + mass, data = pima) %&gt;%\n  step_normalize(all_numeric_predictors())\n\nlog_workflow &lt;-\n  workflow() %&gt;%\n  add_model(logistic_spec) %&gt;%\n  add_recipe(log_recipe)\n\nlog_fit_multi &lt;- fit(log_workflow, data = pima)\nlog_fit_multi\n\n══ Workflow [trained] ══════════════════════════════════════════════════════════\nPreprocessor: Recipe\nModel: logistic_reg()\n\n── Preprocessor ────────────────────────────────────────────────────────────────\n1 Recipe Step\n\n• step_normalize()\n\n── Model ───────────────────────────────────────────────────────────────────────\n\nCall:  stats::glm(formula = ..y ~ ., family = stats::binomial, data = data)\n\nCoefficients:\n(Intercept)      glucose          age         mass  \n     0.8506      -1.0395      -0.3547      -0.6433  \n\nDegrees of Freedom: 767 Total (i.e. Null);  764 Residual\nNull Deviance:      993.5 \nResidual Deviance: 755.7    AIC: 763.7\n\n\nNotice, when we open in our environment the model created, it includes too, the preprocessing information!\nThis is similar in spirit to scikit-learn pipelines.",
+    "objectID": "decision_threshold.html#fit-a-logistic-regression-model-using-tidymodels",
+    "href": "decision_threshold.html#fit-a-logistic-regression-model-using-tidymodels",
+    "title": "(2) Decision Threshold",
+    "section": "3. Fit a logistic regression model using tidymodels",
+    "text": "3. Fit a logistic regression model using tidymodels\n\nlog_spec &lt;- \n  logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glm\")\n\nlog_fit &lt;- \n  log_spec %&gt;%\n  fit(diabetes ~ glucose, data = pima)\n\ntidy(log_fit)\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic  p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)   5.35     0.421        12.7 4.99e-37\n2 glucose      -0.0379   0.00325     -11.6 2.38e-31",
     "crumbs": [
       "Supervised Learning:Logistic Regression",
-      "(0) Unified Modelling Frameworks in R & Python"
+      "(2) Decision Threshold"
     ]
   },
   {
-    "objectID": "tidymodels_sklearn_overview.html#scikit-learn-python-unified-estimator-api",
-    "href": "tidymodels_sklearn_overview.html#scikit-learn-python-unified-estimator-api",
-    "title": "(0) Unified Modelling Frameworks in R & Python",
-    "section": "3. Scikit-learn (Python): unified estimator API",
-    "text": "3. Scikit-learn (Python): unified estimator API\n\n\n\n\n\n\nNote\n\n\n\nDocs:\n- Scikit-learn homepage: https://scikit-learn.org/stable/\n- User guide: https://scikit-learn.org/stable/user_guide.html\n- API overview: https://scikit-learn.org/stable/developers/develop.html#apis-of-scikit-learn-objects\n\n\nIn scikit-learn, all models follow the same estimator API:\nmodel = SomeEstimator(hyperparameters)\nmodel.fit(X_train, y_train)\ny_pred = model.predict(X_test)\nExamples:\n\n\nLinearRegression (ordinary least squares)\n\nLogisticRegression (classification)\nDecisionTreeClassifier\nRandomForestClassifier\n\nSVC (support vector classifier)\nKNeighborsClassifier\n\nMLPClassifier (neural network)\nPreprocessors like StandardScaler, OneHotEncoder\n\n\n3.1 A simple logistic regression in scikit-learn\n\n#Python\nfrom sklearn.datasets import load_breast_cancer\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import accuracy_score\n\n# Load data\ndata = load_breast_cancer()\nX = data.data\ny = data.target   # 0 = malignant, 1 = benign\n\n# Train / test split\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.3, random_state=42, stratify=y\n)\n\n# Define model (specification)\nlog_reg = LogisticRegression(max_iter=1000,\n    solver=\"liblinear\")\n\n# Fit model\nlog_reg.fit(X_train, y_train)\n\n\n\n\nLogisticRegression(max_iter=1000, solver='liblinear')\nIn a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.\n\n\nLogisticRegression\n\n?Documentation for LogisticRegressioniFitted\n\n        \n            Parameters\n\n\npenalty \n'l2'\n\n\n\ndual \nFalse\n\n\n\ntol \n0.0001\n\n\n\nC \n1.0\n\n\n\nfit_intercept \nTrue\n\n\n\nintercept_scaling \n1\n\n\n\nclass_weight \nNone\n\n\n\nrandom_state \nNone\n\n\n\nsolver \n'liblinear'\n\n\n\nmax_iter \n1000\n\n\n\nmulti_class \n'deprecated'\n\n\n\nverbose \n0\n\n\n\nwarm_start \nFalse\n\n\n\nn_jobs \nNone\n\n\n\nl1_ratio \nNone\n\n\n\n    \n\n\n\n\n\n# Predict\ny_pred = log_reg.predict(X_test)\n\nHere:\n\n\nLogisticRegression(...) = model specification (similar to logistic_reg() in parsnip)\nUnder the hood, it calls a numerical solver (e.g. \"lbfgs\", \"liblinear\", \"saga\") – this is analogous to an engine.\n3.2 Probabilities and log-odds (logits)\nWe can access predicted probabilities with predict_proba:\n\n#Python\ny_proba = log_reg.predict_proba(X_test)\ny_proba[:5]\n\narray([[7.09013048e-01, 2.90986952e-01],\n       [1.07801108e-02, 9.89219889e-01],\n       [6.67983197e-04, 9.99332017e-01],\n       [9.89039021e-01, 1.09609792e-02],\n       [2.77066904e-01, 7.22933096e-01]])\n\n\n\nColumn 0 = (P( x))\n\nColumn 1 = (P( x))\n\nThe underlying logits (log-odds) are related to these probabilities via the logistic function.",
+    "objectID": "decision_threshold.html#add-predicted-probabilities",
+    "href": "decision_threshold.html#add-predicted-probabilities",
+    "title": "(2) Decision Threshold",
+    "section": "4. Add predicted probabilities",
+    "text": "4. Add predicted probabilities\nLets make it easier to understand and just predict diabetes for the 15 first samples of our dataset\n\nprediction_pima &lt;- \n  predict(log_fit, new_data = pima[1:15,], type = \"prob\") %&gt;%\n  rename(prob = .pred_pos)  %&gt;%\n  dplyr::bind_cols(pima[1:15,])\n\nhead(pima)\n\n  glucose diabetes diabetes_dummy\n1     148      pos              1\n2      85      neg              0\n3     183      pos              1\n4      89      neg              0\n5     137      pos              1\n6     116      neg              0",
     "crumbs": [
       "Supervised Learning:Logistic Regression",
-      "(0) Unified Modelling Frameworks in R & Python"
+      "(2) Decision Threshold"
     ]
   },
   {
-    "objectID": "tidymodels_sklearn_overview.html#pipelines-tidymodels-workflows-vs-scikit-learn-pipeline",
-    "href": "tidymodels_sklearn_overview.html#pipelines-tidymodels-workflows-vs-scikit-learn-pipeline",
-    "title": "(0) Unified Modelling Frameworks in R & Python",
-    "section": "4. Pipelines: tidymodels workflows vs scikit-learn Pipeline",
-    "text": "4. Pipelines: tidymodels workflows vs scikit-learn Pipeline\nBoth ecosystems support pipelines to chain preprocessing + model in a leak-free way.\n4.1 Tidymodels workflow (R)\nWe already saw:\n\n#R\nlog_recipe &lt;-\n  recipe(diabetes ~ glucose + age + mass, data = pima) %&gt;%\n  step_normalize(all_numeric_predictors())\n\nlogistic_spec &lt;-\n  logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glm\")\n\nlog_workflow &lt;-\n  workflow() %&gt;%\n  add_model(logistic_spec) %&gt;%\n  add_recipe(log_recipe)\n\nlog_fit_multi &lt;- fit(log_workflow, data = pima)\n\nHere:\n\n\nrecipe = preprocessing steps\n\n\nlogistic_spec = model specification + engine\n\n\nworkflow = pipeline object (prep + fit together)\n4.2 Scikit-learn Pipeline (Python)\nThe scikit-learn equivalent uses Pipeline and transformers:\n\n#Python\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LogisticRegression\n\npipe = Pipeline([\n    (\"scale\", StandardScaler()),          # preprocessing step\n    (\"log_reg\", LogisticRegression(\n    max_iter=1000,\n    solver=\"liblinear\"\n))\n])\n\npipe.fit(X_train, y_train)\n\n\n\n\nPipeline(steps=[('scale', StandardScaler()),\n                ('log_reg',\n                 LogisticRegression(max_iter=1000, solver='liblinear'))])\nIn a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.\n\n\n\nPipeline\n\n?Documentation for PipelineiFitted\n\n        \n            Parameters\n\n\nsteps \n[('scale', ...), ('log_reg', ...)]\n\n\n\ntransform_input \nNone\n\n\n\nmemory \nNone\n\n\n\nverbose \nFalse\n\n\n\n    \n\n\n\nStandardScaler\n?Documentation for StandardScaler\n        \n            Parameters\n\n\ncopy \nTrue\n\n\n\nwith_mean \nTrue\n\n\n\nwith_std \nTrue\n\n\n\n    \n\n\nLogisticRegression\n?Documentation for LogisticRegression\n        \n            Parameters\n\n\npenalty \n'l2'\n\n\n\ndual \nFalse\n\n\n\ntol \n0.0001\n\n\n\nC \n1.0\n\n\n\nfit_intercept \nTrue\n\n\n\nintercept_scaling \n1\n\n\n\nclass_weight \nNone\n\n\n\nrandom_state \nNone\n\n\n\nsolver \n'liblinear'\n\n\n\nmax_iter \n1000\n\n\n\nmulti_class \n'deprecated'\n\n\n\nverbose \n0\n\n\n\nwarm_start \nFalse\n\n\n\nn_jobs \nNone\n\n\n\nl1_ratio \nNone\n\n\n\n    \n\n\n\n\n\n\npipe.score(X_test, y_test)\n\n0.9883040935672515\n\n\n\n\nStandardScaler() = transformer (similar to step_normalize)\n\n\nLogisticRegression() = estimator (similar role to logistic_reg() + engine \"glm\")\n\n\nPipeline = links them, ensures the same transformations are applied in training and testing.",
+    "objectID": "decision_threshold.html#create-predicted-classes-for-different-thresholds",
+    "href": "decision_threshold.html#create-predicted-classes-for-different-thresholds",
+    "title": "(2) Decision Threshold",
+    "section": "5. Create predicted classes for different thresholds",
+    "text": "5. Create predicted classes for different thresholds\nThen we want to assess how our final prediction changes based on the threshold we use\n\nprediction_pima &lt;- prediction_pima %&gt;%\n  mutate(\n    class_0.3 = if_else(prob &gt;= 0.3, 1, 0),\n    class_0.5 = if_else(prob &gt;= 0.5, 1, 0),\n    class_0.7 = if_else(prob &gt;= 0.7, 1, 0)\n  )",
     "crumbs": [
       "Supervised Learning:Logistic Regression",
-      "(0) Unified Modelling Frameworks in R & Python"
+      "(2) Decision Threshold"
     ]
   },
   {
-    "objectID": "tidymodels_sklearn_overview.html#summary-parsnip-tidymodels-vs-scikit-learn",
-    "href": "tidymodels_sklearn_overview.html#summary-parsnip-tidymodels-vs-scikit-learn",
-    "title": "(0) Unified Modelling Frameworks in R & Python",
-    "section": "6. Summary: parsnip + tidymodels vs scikit-learn",
-    "text": "6. Summary: parsnip + tidymodels vs scikit-learn\nBoth ecosystems share the same design philosophy:\n\n\nUnified interface for all models\n\nR: fit(), predict() on parsnip/workflow objects\n\nPython: fit(), predict() on estimators\n\n\n\nPipelines and tuning are built-in\n\nLeak-free preprocessing\n\n\n\nThis allows you to focus on the modelling ideas (classification, regression, evaluation, bias–variance, etc.) instead of constantly fighting with different syntaxes and one-off implementations.",
+    "objectID": "decision_threshold.html#visualise-how-probabilities-look",
+    "href": "decision_threshold.html#visualise-how-probabilities-look",
+    "title": "(2) Decision Threshold",
+    "section": "6. Visualise how probabilities look",
+    "text": "6. Visualise how probabilities look\nThis is our predicted probabilities for each of the 10 samples (see that they are trying to make this sigmoid curve). They are coloured by their true diabetes label where (pos = 1 and neg = 0)\n\nggplot(prediction_pima, aes(x = glucose, y = prob, colour = diabetes)) +\n  geom_point(size = 2, alpha = 0.7) +\n  geom_hline(yintercept = 0.3, colour = \"blue\", linetype = \"dashed\") +\n  geom_hline(yintercept = 0.5, colour = \"red\", linetype = \"dashed\") +\n  geom_hline(yintercept = 0.7, colour = \"purple\", linetype = \"dashed\") +\n  labs(\n    x = \"Glucose\",\n    y = \"Predicted probability of diabetes\",\n    title = \"Predicted probabilities with threshold lines\"\n  ) +\n  theme_minimal()",
     "crumbs": [
       "Supervised Learning:Logistic Regression",
-      "(0) Unified Modelling Frameworks in R & Python"
+      "(2) Decision Threshold"
+    ]
+  },
+  {
+    "objectID": "decision_threshold.html#confusion-tables",
+    "href": "decision_threshold.html#confusion-tables",
+    "title": "(2) Decision Threshold",
+    "section": "7. Confusion tables",
+    "text": "7. Confusion tables\nThreshold = 0.3\n\ntable(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.3)\n\n    Predicted\nTrue 0 1\n   0 5 1\n   1 1 8\n\n\nThreshold = 0.5\n\ntable(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.5)\n\n    Predicted\nTrue 0 1\n   0 6 0\n   1 3 6\n\n\nThreshold = 0.7\n\ntable(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.7)\n\n    Predicted\nTrue 0 1\n   0 6 0\n   1 4 5",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(2) Decision Threshold"
+    ]
+  },
+  {
+    "objectID": "decision_threshold.html#compare-thresholds-side-by-side",
+    "href": "decision_threshold.html#compare-thresholds-side-by-side",
+    "title": "(2) Decision Threshold",
+    "section": "8. Compare thresholds side-by-side",
+    "text": "8. Compare thresholds side-by-side\n\nthreshold_compare &lt;- tibble(\n  threshold = c(\"0.3\", \"0.5\", \"0.7\"),\n  TP = c(\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.3 == 1),\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.5 == 1),\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.7 == 1)\n  ),\n  FP = c(\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.3 == 1),\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.5 == 1),\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.7 == 1)\n  ),\n  FN = c(\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.3 == 0),\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.5 == 0),\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.7 == 0)\n  ),\n  TN = c(\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.3 == 0),\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.5 == 0),\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.7 == 0)\n  )\n)\n\nthreshold_compare\n\n# A tibble: 3 × 5\n  threshold    TP    FP    FN    TN\n  &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;\n1 0.3           8     1     1     5\n2 0.5           6     0     3     6\n3 0.7           5     0     4     6\n\n\n\nChanging the decision threshold changes the type of mistakes the model makes.\nA low threshold increases sensitivity (more positives detected).\nA high threshold increases specificity (fewer false positives).\nCheckout this graph for more insight to see what we mean by sensitivity and specificity\n\nknitr::include_graphics(\"https://iq.opengenus.org/content/images/2021/11/summary.png\")\n\n\n\n\n\n\n\n\nthreshold_metrics &lt;- threshold_compare %&gt;%\n  mutate(\n    Sensitivity = round(TP / (TP + FN), 3),\n    Specificity = round(TN / (TN + FP), 3)\n  )\n\nthreshold_metrics\n\n# A tibble: 3 × 7\n  threshold    TP    FP    FN    TN Sensitivity Specificity\n  &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;       &lt;dbl&gt;       &lt;dbl&gt;\n1 0.3           8     1     1     5       0.889       0.833\n2 0.5           6     0     3     6       0.667       1    \n3 0.7           5     0     4     6       0.556       1    \n\n\nFor the future, whenver youw nat to report the result of your classification model, we will need to understand how well it performs and so you will have to build a confusion matrix like the above shown. Instead of these tables, there are already curated packages to do so. We will go through it more in detail on Friday. But here is a snippet.\nFor instance, going back to prediction_pima if we want to report in a fianl confusion matrix our results with threshold = 0.7 we can do the following:\nConfusion matrix using tidymodels\n\n#Set as factors the required columns: \nprediction_pima$diabetes_dummy &lt;- as.factor(prediction_pima$diabetes_dummy)\nprediction_pima$class_0.7 &lt;- as.factor(prediction_pima$class_0.7)\ndata &lt;- data.frame(actual = prediction_pima$diabetes_dummy, predicted = prediction_pima$class_0.7)\n\ncm &lt;- data %&gt;%\n  conf_mat(truth = actual, estimate = predicted)\n\ncm\n\n          Truth\nPrediction 0 1\n         0 6 4\n         1 0 5\n\n\n\nautoplot(cm, type = \"heatmap\") #what other types are there? \n\n\n\n\n\n\n\n\n\n\n\n\n:::{#quarto-navigation-envelope .hidden}\n[Supervised Learning:Logistic Regression]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl\"}\n[HDS MSc - Module 3 - Supervised Learning - Classification - Logistic Reg]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWludC1uYXZiYXItdGl0bGU=\"}\n[(1a) Fitting a logistic regression model - Python (scikit-learn)]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWludC1wcmV2\"}\n[(0) Unified Modelling Frameworks in R & Python]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWludC1zaWRlYmFyOi90aWR5bW9kZWxzX3NrbGVhcm5fb3ZlcnZpZXcuaHRtbCgwKS1VbmlmaWVkLU1vZGVsbGluZy1GcmFtZXdvcmtzLWluLVItJi1QeXRob24=\"}\n[(1a) Fitting a logistic regression model - R (tidymodels)]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWludC1zaWRlYmFyOi9sb2dpc3RpY19yZWdyZXNzaW9uX3RpZHltb2RlbHMuaHRtbCgxYSktRml0dGluZy1hLWxvZ2lzdGljLXJlZ3Jlc3Npb24tbW9kZWwtLS1SLSh0aWR5bW9kZWxzKQ==\"}\n[(1a) Fitting a logistic regression model - Python (scikit-learn)]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWludC1zaWRlYmFyOi9sb2dpc3RpY19yZWdyZXNzaW9uX3B5dGhvbi5odG1sKDFhKS1GaXR0aW5nLWEtbG9naXN0aWMtcmVncmVzc2lvbi1tb2RlbC0tLVB5dGhvbi0oc2Npa2l0LWxlYXJuKQ==\"}\n[(2) Decision Threshold]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWludC1zaWRlYmFyOi9kZWNpc2lvbl90aHJlc2hvbGQuaHRtbCgyKS1EZWNpc2lvbi1UaHJlc2hvbGQ=\"}\n[Supervised Learning:Logistic Regression]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWludC1uYXZiYXI6U3VwZXJ2aXNlZCBMZWFybmluZzpMb2dpc3RpYyBSZWdyZXNzaW9u\"}\n[/tidymodels_sklearn_overview.html]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWludC1uYXZiYXI6L3RpZHltb2RlbHNfc2tsZWFybl9vdmVydmlldy5odG1s\"}\n[(2) Decision Threshold]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLWJyZWFkY3J1bWJzLSgyKS1EZWNpc2lvbi1UaHJlc2hvbGQ=\"}\n\n:::{.hidden .quarto-markdown-envelope-contents render-id=\"Zm9vdGVyLWxlZnQ=\"}\nCopyright 2025, Laura Bravo\n:::\n\n:::\n\n\n\n:::{#quarto-meta-markdown .hidden}\n[(2) Decision Threshold – HDS MSc - Module 3 - Supervised Learning - Classification - Logistic Reg]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLW1ldGF0aXRsZQ==\"}\n[(2) Decision Threshold – HDS MSc - Module 3 - Supervised Learning - Classification - Logistic Reg]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=\"}\n[(2) Decision Threshold – HDS MSc - Module 3 - Supervised Learning - Classification - Logistic Reg]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLW9nY2FyZHRpdGxl\"}\n[HDS MSc - Module 3 - Supervised Learning - Classification - Logistic Reg]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLW1ldGFzaXRlbmFtZQ==\"}\n[]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==\"}\n[]{.hidden .quarto-markdown-envelope-contents render-id=\"cXVhcnRvLW9nY2FyZGRkZXNj\"}\n:::\n\n\n\n\n&lt;!-- --&gt;\n\n::: {.quarto-embedded-source-code}\n```````````````````{.markdown shortcodes=\"false\"}\n---\ntitle: \"(2) Decision Threshold\"\nformat: html\nexecute:\n  echo: true\n  message: false\n---\n\n## 1. Introduction\n\nIn logistic regression, the model outputs a **probability**:\n\n\\[\n\\hat{p}(x) = P(Y=1 \\mid x)\n\\]\n\nBut to turn this probability into a **class prediction**, we must choose a:\n\n# **Decision Threshold**\n\nTypically:  \n- If \\(\\hat{p}(x) \\ge 0.5\\) → predict **1**  \n- If \\(\\hat{p}(x) &lt; 0.5\\) → predict **0**\n\nBut **0.5 is arbitrary**.  \nChanging the threshold changes:\n\n- True Positives (TP)  \n- False Positives (FP)  \n- True Negatives (TN)  \n- False Negatives (FN)\n\nWe will explore this in detail later on too but lets get an idea: \n\n---\n\n## 2. Load and prepare the data\n\nquarto-executable-code-5450563D\n\n```r\nlibrary(mlbench)\nlibrary(tidyverse)\nlibrary(tidymodels)\n\ndata(\"PimaIndiansDiabetes\")\n\npima &lt;- PimaIndiansDiabetes %&gt;%\n  select(glucose, diabetes) %&gt;%\n  mutate(\n    diabetes = fct_relevel(diabetes, \"pos\"),\n    diabetes_dummy = if_else(diabetes == \"pos\", 1, 0)\n  )",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(2) Decision Threshold"
+    ]
+  },
+  {
+    "objectID": "decision_threshold.html#fit-a-logistic-regression-model-using-tidymodels-1",
+    "href": "decision_threshold.html#fit-a-logistic-regression-model-using-tidymodels-1",
+    "title": "(2) Decision Threshold",
+    "section": "3. Fit a logistic regression model using tidymodels",
+    "text": "3. Fit a logistic regression model using tidymodels\nquarto-executable-code-5450563D\nlog_spec &lt;- \n  logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glm\")\n\nlog_fit &lt;- \n  log_spec %&gt;%\n  fit(diabetes ~ glucose, data = pima)\n\ntidy(log_fit)",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(2) Decision Threshold"
+    ]
+  },
+  {
+    "objectID": "decision_threshold.html#add-predicted-probabilities-1",
+    "href": "decision_threshold.html#add-predicted-probabilities-1",
+    "title": "(2) Decision Threshold",
+    "section": "4. Add predicted probabilities",
+    "text": "4. Add predicted probabilities\nLets make it easier to understand and just predict diabetes for the 15 first samples of our dataset\nquarto-executable-code-5450563D\nprediction_pima &lt;- \n  predict(log_fit, new_data = pima[1:15,], type = \"prob\") %&gt;%\n  rename(prob = .pred_pos)  %&gt;%\n  dplyr::bind_cols(pima[1:15,])\n\nhead(pima)",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(2) Decision Threshold"
+    ]
+  },
+  {
+    "objectID": "decision_threshold.html#create-predicted-classes-for-different-thresholds-1",
+    "href": "decision_threshold.html#create-predicted-classes-for-different-thresholds-1",
+    "title": "(2) Decision Threshold",
+    "section": "5. Create predicted classes for different thresholds",
+    "text": "5. Create predicted classes for different thresholds\nThen we want to assess how our final prediction changes based on the threshold we use\nquarto-executable-code-5450563D\nprediction_pima &lt;- prediction_pima %&gt;%\n  mutate(\n    class_0.3 = if_else(prob &gt;= 0.3, 1, 0),\n    class_0.5 = if_else(prob &gt;= 0.5, 1, 0),\n    class_0.7 = if_else(prob &gt;= 0.7, 1, 0)\n  )",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(2) Decision Threshold"
+    ]
+  },
+  {
+    "objectID": "decision_threshold.html#visualise-how-probabilities-look-1",
+    "href": "decision_threshold.html#visualise-how-probabilities-look-1",
+    "title": "(2) Decision Threshold",
+    "section": "6. Visualise how probabilities look",
+    "text": "6. Visualise how probabilities look\nThis is our predicted probabilities for each of the 10 samples (see that they are trying to make this sigmoid curve). They are coloured by their true diabetes label where (pos = 1 and neg = 0)\nquarto-executable-code-5450563D\nggplot(prediction_pima, aes(x = glucose, y = prob, colour = diabetes)) +\n  geom_point(size = 2, alpha = 0.7) +\n  geom_hline(yintercept = 0.3, colour = \"blue\", linetype = \"dashed\") +\n  geom_hline(yintercept = 0.5, colour = \"red\", linetype = \"dashed\") +\n  geom_hline(yintercept = 0.7, colour = \"purple\", linetype = \"dashed\") +\n  labs(\n    x = \"Glucose\",\n    y = \"Predicted probability of diabetes\",\n    title = \"Predicted probabilities with threshold lines\"\n  ) +\n  theme_minimal()",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(2) Decision Threshold"
+    ]
+  },
+  {
+    "objectID": "decision_threshold.html#confusion-tables-1",
+    "href": "decision_threshold.html#confusion-tables-1",
+    "title": "(2) Decision Threshold",
+    "section": "7. Confusion tables",
+    "text": "7. Confusion tables\nThreshold = 0.3\nquarto-executable-code-5450563D\ntable(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.3)\nThreshold = 0.5\nquarto-executable-code-5450563D\ntable(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.5)\nThreshold = 0.7\nquarto-executable-code-5450563D\ntable(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.7)",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(2) Decision Threshold"
+    ]
+  },
+  {
+    "objectID": "decision_threshold.html#compare-thresholds-side-by-side-1",
+    "href": "decision_threshold.html#compare-thresholds-side-by-side-1",
+    "title": "(2) Decision Threshold",
+    "section": "8. Compare thresholds side-by-side",
+    "text": "8. Compare thresholds side-by-side\nquarto-executable-code-5450563D\nthreshold_compare &lt;- tibble(\n  threshold = c(\"0.3\", \"0.5\", \"0.7\"),\n  TP = c(\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.3 == 1),\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.5 == 1),\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.7 == 1)\n  ),\n  FP = c(\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.3 == 1),\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.5 == 1),\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.7 == 1)\n  ),\n  FN = c(\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.3 == 0),\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.5 == 0),\n    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.7 == 0)\n  ),\n  TN = c(\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.3 == 0),\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.5 == 0),\n    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.7 == 0)\n  )\n)\n\nthreshold_compare\n\nChanging the decision threshold changes the type of mistakes the model makes.\nA low threshold increases sensitivity (more positives detected).\nA high threshold increases specificity (fewer false positives).\nCheckout this graph for more insight to see what we mean by sensitivity and specificity\nquarto-executable-code-5450563D\nknitr::include_graphics(\"https://iq.opengenus.org/content/images/2021/11/summary.png\")\nquarto-executable-code-5450563D\nthreshold_metrics &lt;- threshold_compare %&gt;%\n  mutate(\n    Sensitivity = round(TP / (TP + FN), 3),\n    Specificity = round(TN / (TN + FP), 3)\n  )\n\nthreshold_metrics\nFor the future, whenver youw nat to report the result of your classification model, we will need to understand how well it performs and so you will have to build a confusion matrix like the above shown. Instead of these tables, there are already curated packages to do so. We will go through it more in detail on Friday. But here is a snippet.\nFor instance, going back to prediction_pima if we want to report in a fianl confusion matrix our results with threshold = 0.7 we can do the following:\nConfusion matrix using tidymodels\nquarto-executable-code-5450563D\n#Set as factors the required columns: \nprediction_pima$diabetes_dummy &lt;- as.factor(prediction_pima$diabetes_dummy)\nprediction_pima$class_0.7 &lt;- as.factor(prediction_pima$class_0.7)\ndata &lt;- data.frame(actual = prediction_pima$diabetes_dummy, predicted = prediction_pima$class_0.7)\n\ncm &lt;- data %&gt;%\n  conf_mat(truth = actual, estimate = predicted)\n\ncm\nquarto-executable-code-5450563D\nautoplot(cm, type = \"heatmap\") #what other types are there? \n\n:::",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(2) Decision Threshold"
     ]
   },
   {
@@ -173,6 +228,116 @@
     "crumbs": [
       "Supervised Learning:Logistic Regression",
       "(1a) Fitting a logistic regression model - R (tidymodels)"
+    ]
+  },
+  {
+    "objectID": "tidymodels_sklearn_overview.html",
+    "href": "tidymodels_sklearn_overview.html",
+    "title": "(0) Unified Modelling Frameworks in R & Python",
+    "section": "",
+    "text": "library(reticulate)\n\n# one-off setup (if you haven't done it yet)\n# install_miniconda()\n\n##conda_create(\n##  envname = \"hds-python\",\n##  python_version = \"3.11\",\n##  packages = c(\"numpy\", \"pandas\", \"matplotlib\", \"seaborn\", \"scikit-learn\")\n##)\n\nuse_condaenv(\"hds-python\", required = TRUE)\n#py_config()\n\n#conda_install(\"hds-python\", c(\"jupyter\", \"plotly\"))",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(0) Unified Modelling Frameworks in R & Python"
+    ]
+  },
+  {
+    "objectID": "tidymodels_sklearn_overview.html#why-frameworks-like-tidymodels-and-scikit-learn",
+    "href": "tidymodels_sklearn_overview.html#why-frameworks-like-tidymodels-and-scikit-learn",
+    "title": "(0) Unified Modelling Frameworks in R & Python",
+    "section": "1. Why frameworks like tidymodels and scikit-learn?",
+    "text": "1. Why frameworks like tidymodels and scikit-learn?\nIn both R and Python, there are many ways to fit models:\n\nR: lm(), glm(), rpart(), randomForest(), xgboost(), …\nPython: statsmodels, custom NumPy/SciPy code, or many different classes in sklearn\n\n\nEach function or class often has its own syntax, argument names and prediction methods.\nThis becomes difficult when we want to:\n\nswap one model for another,\ncompare models fairly,\nbuild end-to-end pipelines with preprocessing + model + evaluation,\ndo hyperparameter tuning cleanly and without data leakage.\n\nTwo ecosystems help us solve this:\n\n\ntidymodels in R\n\n\nscikit-learn in Python\n\nBoth provide a unified, consistent interface for models, preprocessing, pipelines and tuning.",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(0) Unified Modelling Frameworks in R & Python"
+    ]
+  },
+  {
+    "objectID": "tidymodels_sklearn_overview.html#tidymodels-r-model-specification-engine",
+    "href": "tidymodels_sklearn_overview.html#tidymodels-r-model-specification-engine",
+    "title": "(0) Unified Modelling Frameworks in R & Python",
+    "section": "2. Tidymodels (R): model specification + engine\n",
+    "text": "2. Tidymodels (R): model specification + engine\n\n\n\n\n\n\n\nNote\n\n\n\nDocs:\n- Tidymodels homepage: https://www.tidymodels.org/\n- Getting started: https://www.tidymodels.org/start/\n- parsnip reference: https://parsnip.tidymodels.org/reference/index.html\n\n\nIn tidymodels, we separate:\n\n\nWhat kind of model we want → the specification\n\n\nHow it is implemented → the engine\n\n\n2.1 Model specification\nWe declare high-level models like this (classification / regression only, no engine yet):\n\n#R\nlibrary(tidymodels)\n\n── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──\n\n\n✔ broom        1.0.10     ✔ recipes      1.3.1 \n✔ dials        1.4.2      ✔ rsample      1.3.1 \n✔ dplyr        1.1.4      ✔ tailor       0.1.0 \n✔ ggplot2      4.0.0      ✔ tidyr        1.3.1 \n✔ infer        1.0.9      ✔ tune         2.0.1 \n✔ modeldata    1.5.1      ✔ workflows    1.3.0 \n✔ parsnip      1.3.3      ✔ workflowsets 1.1.1 \n✔ purrr        1.2.0      ✔ yardstick    1.3.2 \n\n\n── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──\n✖ purrr::discard() masks scales::discard()\n✖ dplyr::filter()  masks stats::filter()\n✖ dplyr::lag()     masks stats::lag()\n✖ recipes::step()  masks stats::step()\n\nlog_spec   &lt;- logistic_reg(mode = \"classification\")\ntree_spec  &lt;- decision_tree(mode = \"classification\")\nrf_spec    &lt;- rand_forest(mode = \"regression\")\nknn_spec   &lt;- nearest_neighbor(mode = \"classification\")\n\nlog_spec\n\nLogistic Regression Model Specification (classification)\n\nComputational engine: glm \n\ntree_spec\n\nDecision Tree Model Specification (classification)\n\nComputational engine: rpart \n\n\nThis does not fit a model yet. It just says:\n\n“I want a logistic regression classifier”\n“I want a decision tree for classification”\netc.\n2.2 Engines: how the model is actually fit\nThe engine is the backend algorithm. We choose it with set_engine():\n\n#R\nlog_spec_glm &lt;- logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glm\")      # uses base R glm() with binomial family\n\nlog_spec_glmnet &lt;- logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glmnet\")   # uses penalised regression (elastic net)\n\ntree_spec_rpart &lt;- decision_tree(mode = \"classification\") %&gt;%\n  set_engine(\"rpart\")    # uses rpart (CART)\n\nboost_spec_xgb &lt;- boost_tree(mode = \"classification\") %&gt;%\n  set_engine(\"xgboost\")  # uses xgboost library\n\nDifferent engines = different algorithms for the same kind of model.\n2.3 Fitting a logistic regression model with tidymodels\nBelow we use the Pima Indians diabetes data and compare to the glm() style you already know.\n\n#R\nlibrary(mlbench)\ndata(\"PimaIndiansDiabetes\")\n\npima &lt;- PimaIndiansDiabetes %&gt;%\n  dplyr::select(glucose, mass, age, diabetes) %&gt;%\n  # we want \"pos\" (diabetes present) as the event of interest\n  dplyr::mutate(diabetes = forcats::fct_relevel(diabetes, \"pos\")) # here we are saying that what we are trying to predict (i=our positive, 1 class is \"pos\")\n\nsplit &lt;- initial_split(pima, prop = 0.8, strata = diabetes)\npima_train &lt;- training(split)\npima_test  &lt;- testing(split)\n\n# Model spec + engine\nlogistic_spec &lt;-\n  logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glm\")   # internally: glm(..., family = binomial)\n\nFit the model using fit() with a formula interface:\n\n#R\nlogistic_fit &lt;-\n  logistic_spec %&gt;%\n  fit(diabetes ~ glucose, data = pima_train)\n\nlogistic_fit\n\nparsnip model object\n\n\nCall:  stats::glm(formula = diabetes ~ glucose, family = stats::binomial, \n    data = data)\n\nCoefficients:\n(Intercept)      glucose  \n    5.60587     -0.03996  \n\nDegrees of Freedom: 613 Total (i.e. Null);  612 Residual\nNull Deviance:      793.9 \nResidual Deviance: 633.6    AIC: 637.6\n\n\nInspect the coefficients (these are log-odds / logit coefficients):\n\n#R\ntidy(logistic_fit)\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic  p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1 (Intercept)   5.61     0.483        11.6 3.38e-31\n2 glucose      -0.0400   0.00373     -10.7 9.58e-27\n\n\n2.4 Making predictions in a consistent way\nAll parsnip models support the same predict() interface:\n\n#R\npima_preds &lt;-\n  predict(logistic_fit, new_data = pima_test, type = \"prob\") %&gt;%\n  dplyr::bind_cols(pima_test)\n\nhead(pima_preds)\n\n# A tibble: 6 × 6\n  .pred_pos .pred_neg glucose  mass   age diabetes\n      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   \n1     0.114    0.886       89  28.1    21 neg     \n2     0.275    0.725      116  25.6    30 neg     \n3     0.267    0.733      115  34.6    32 pos     \n4     0.161    0.839       99  35.4    50 neg     \n5     0.903    0.0973     196  39.8    41 pos     \n6     0.110    0.890       88  24.8    22 neg     \n\n\nWe can visualise predicted probability vs. glucose:\n\n#R\nlibrary(ggplot2)\n\nggplot(pima_preds, aes(x = glucose, y = .pred_pos)) +\n  geom_point(alpha = 0.4) +\n  labs(\n    x = \"Glucose\",\n    y = \"Predicted probability of diabetes (pos)\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\nHere:\n\n\n.pred_pos = predicted ( P( = ) )\n\n.pred_neg (not shown here) = predicted ( P() )\n2.5 Recipes + workflows (pipelines in tidymodels)\nTidymodels also includes tools for preprocessing and pipelines:\n\n\nrecipes → scaling, imputation, one-hot encoding, etc.\n\n\nworkflows → combine a model + recipe into a single object\n\n\n#R\nlog_recipe &lt;-\n  recipe(diabetes ~ glucose + age + mass, data = pima) %&gt;%\n  step_normalize(all_numeric_predictors())\n\nlog_workflow &lt;-\n  workflow() %&gt;%\n  add_model(logistic_spec) %&gt;%\n  add_recipe(log_recipe)\n\nlog_fit_multi &lt;- fit(log_workflow, data = pima)\nlog_fit_multi\n\n══ Workflow [trained] ══════════════════════════════════════════════════════════\nPreprocessor: Recipe\nModel: logistic_reg()\n\n── Preprocessor ────────────────────────────────────────────────────────────────\n1 Recipe Step\n\n• step_normalize()\n\n── Model ───────────────────────────────────────────────────────────────────────\n\nCall:  stats::glm(formula = ..y ~ ., family = stats::binomial, data = data)\n\nCoefficients:\n(Intercept)      glucose          age         mass  \n     0.8506      -1.0395      -0.3547      -0.6433  \n\nDegrees of Freedom: 767 Total (i.e. Null);  764 Residual\nNull Deviance:      993.5 \nResidual Deviance: 755.7    AIC: 763.7\n\n\nNotice, when we open in our environment the model created, it includes too, the preprocessing information!\nThis is similar in spirit to scikit-learn pipelines.",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(0) Unified Modelling Frameworks in R & Python"
+    ]
+  },
+  {
+    "objectID": "tidymodels_sklearn_overview.html#scikit-learn-python-unified-estimator-api",
+    "href": "tidymodels_sklearn_overview.html#scikit-learn-python-unified-estimator-api",
+    "title": "(0) Unified Modelling Frameworks in R & Python",
+    "section": "3. Scikit-learn (Python): unified estimator API",
+    "text": "3. Scikit-learn (Python): unified estimator API\n\n\n\n\n\n\nNote\n\n\n\nDocs:\n- Scikit-learn homepage: https://scikit-learn.org/stable/\n- User guide: https://scikit-learn.org/stable/user_guide.html\n- API overview: https://scikit-learn.org/stable/developers/develop.html#apis-of-scikit-learn-objects\n\n\nIn scikit-learn, all models follow the same estimator API:\nmodel = SomeEstimator(hyperparameters)\nmodel.fit(X_train, y_train)\ny_pred = model.predict(X_test)\nExamples:\n\n\nLinearRegression (ordinary least squares)\n\nLogisticRegression (classification)\nDecisionTreeClassifier\nRandomForestClassifier\n\nSVC (support vector classifier)\nKNeighborsClassifier\n\nMLPClassifier (neural network)\nPreprocessors like StandardScaler, OneHotEncoder\n\n\n3.1 A simple logistic regression in scikit-learn\n\n#Python\nfrom sklearn.datasets import load_breast_cancer\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import accuracy_score\n\n# Load data\ndata = load_breast_cancer()\nX = data.data\ny = data.target   # 0 = malignant, 1 = benign\n\n# Train / test split\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.3, random_state=42, stratify=y\n)\n\n# Define model (specification)\nlog_reg = LogisticRegression(max_iter=1000,\n    solver=\"liblinear\")\n\n# Fit model\nlog_reg.fit(X_train, y_train)\n\n\n\n\nLogisticRegression(max_iter=1000, solver='liblinear')\nIn a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.\n\n\nLogisticRegression\n\n?Documentation for LogisticRegressioniFitted\n\n        \n            Parameters\n\n\npenalty \n'l2'\n\n\n\ndual \nFalse\n\n\n\ntol \n0.0001\n\n\n\nC \n1.0\n\n\n\nfit_intercept \nTrue\n\n\n\nintercept_scaling \n1\n\n\n\nclass_weight \nNone\n\n\n\nrandom_state \nNone\n\n\n\nsolver \n'liblinear'\n\n\n\nmax_iter \n1000\n\n\n\nmulti_class \n'deprecated'\n\n\n\nverbose \n0\n\n\n\nwarm_start \nFalse\n\n\n\nn_jobs \nNone\n\n\n\nl1_ratio \nNone\n\n\n\n    \n\n\n\n\n\n# Predict\ny_pred = log_reg.predict(X_test)\n\nHere:\n\n\nLogisticRegression(...) = model specification (similar to logistic_reg() in parsnip)\nUnder the hood, it calls a numerical solver (e.g. \"lbfgs\", \"liblinear\", \"saga\") – this is analogous to an engine.\n3.2 Probabilities and log-odds (logits)\nWe can access predicted probabilities with predict_proba:\n\n#Python\ny_proba = log_reg.predict_proba(X_test)\ny_proba[:5]\n\narray([[7.09013048e-01, 2.90986952e-01],\n       [1.07801108e-02, 9.89219889e-01],\n       [6.67983197e-04, 9.99332017e-01],\n       [9.89039021e-01, 1.09609792e-02],\n       [2.77066904e-01, 7.22933096e-01]])\n\n\n\nColumn 0 = (P( x))\n\nColumn 1 = (P( x))\n\nThe underlying logits (log-odds) are related to these probabilities via the logistic function.",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(0) Unified Modelling Frameworks in R & Python"
+    ]
+  },
+  {
+    "objectID": "tidymodels_sklearn_overview.html#pipelines-tidymodels-workflows-vs-scikit-learn-pipeline",
+    "href": "tidymodels_sklearn_overview.html#pipelines-tidymodels-workflows-vs-scikit-learn-pipeline",
+    "title": "(0) Unified Modelling Frameworks in R & Python",
+    "section": "4. Pipelines: tidymodels workflows vs scikit-learn Pipeline",
+    "text": "4. Pipelines: tidymodels workflows vs scikit-learn Pipeline\nBoth ecosystems support pipelines to chain preprocessing + model in a leak-free way.\n4.1 Tidymodels workflow (R)\nWe already saw:\n\n#R\nlog_recipe &lt;-\n  recipe(diabetes ~ glucose + age + mass, data = pima) %&gt;%\n  step_normalize(all_numeric_predictors())\n\nlogistic_spec &lt;-\n  logistic_reg(mode = \"classification\") %&gt;%\n  set_engine(\"glm\")\n\nlog_workflow &lt;-\n  workflow() %&gt;%\n  add_model(logistic_spec) %&gt;%\n  add_recipe(log_recipe)\n\nlog_fit_multi &lt;- fit(log_workflow, data = pima)\n\nHere:\n\n\nrecipe = preprocessing steps\n\n\nlogistic_spec = model specification + engine\n\n\nworkflow = pipeline object (prep + fit together)\n4.2 Scikit-learn Pipeline (Python)\nThe scikit-learn equivalent uses Pipeline and transformers:\n\n#Python\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LogisticRegression\n\npipe = Pipeline([\n    (\"scale\", StandardScaler()),          # preprocessing step\n    (\"log_reg\", LogisticRegression(\n    max_iter=1000,\n    solver=\"liblinear\"\n))\n])\n\npipe.fit(X_train, y_train)\n\n\n\n\nPipeline(steps=[('scale', StandardScaler()),\n                ('log_reg',\n                 LogisticRegression(max_iter=1000, solver='liblinear'))])\nIn a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.\n\n\n\nPipeline\n\n?Documentation for PipelineiFitted\n\n        \n            Parameters\n\n\nsteps \n[('scale', ...), ('log_reg', ...)]\n\n\n\ntransform_input \nNone\n\n\n\nmemory \nNone\n\n\n\nverbose \nFalse\n\n\n\n    \n\n\n\nStandardScaler\n?Documentation for StandardScaler\n        \n            Parameters\n\n\ncopy \nTrue\n\n\n\nwith_mean \nTrue\n\n\n\nwith_std \nTrue\n\n\n\n    \n\n\nLogisticRegression\n?Documentation for LogisticRegression\n        \n            Parameters\n\n\npenalty \n'l2'\n\n\n\ndual \nFalse\n\n\n\ntol \n0.0001\n\n\n\nC \n1.0\n\n\n\nfit_intercept \nTrue\n\n\n\nintercept_scaling \n1\n\n\n\nclass_weight \nNone\n\n\n\nrandom_state \nNone\n\n\n\nsolver \n'liblinear'\n\n\n\nmax_iter \n1000\n\n\n\nmulti_class \n'deprecated'\n\n\n\nverbose \n0\n\n\n\nwarm_start \nFalse\n\n\n\nn_jobs \nNone\n\n\n\nl1_ratio \nNone\n\n\n\n    \n\n\n\n\n\n\npipe.score(X_test, y_test)\n\n0.9883040935672515\n\n\n\n\nStandardScaler() = transformer (similar to step_normalize)\n\n\nLogisticRegression() = estimator (similar role to logistic_reg() + engine \"glm\")\n\n\nPipeline = links them, ensures the same transformations are applied in training and testing.",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(0) Unified Modelling Frameworks in R & Python"
+    ]
+  },
+  {
+    "objectID": "tidymodels_sklearn_overview.html#summary-parsnip-tidymodels-vs-scikit-learn",
+    "href": "tidymodels_sklearn_overview.html#summary-parsnip-tidymodels-vs-scikit-learn",
+    "title": "(0) Unified Modelling Frameworks in R & Python",
+    "section": "6. Summary: parsnip + tidymodels vs scikit-learn",
+    "text": "6. Summary: parsnip + tidymodels vs scikit-learn\nBoth ecosystems share the same design philosophy:\n\n\nUnified interface for all models\n\nR: fit(), predict() on parsnip/workflow objects\n\nPython: fit(), predict() on estimators\n\n\n\nPipelines and tuning are built-in\n\nLeak-free preprocessing\n\n\n\nThis allows you to focus on the modelling ideas (classification, regression, evaluation, bias–variance, etc.) instead of constantly fighting with different syntaxes and one-off implementations.",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(0) Unified Modelling Frameworks in R & Python"
+    ]
+  },
+  {
+    "objectID": "logistic_regression_python.html",
+    "href": "logistic_regression_python.html",
+    "title": "(1a) Fitting a logistic regression model - Python (scikit-learn)",
+    "section": "",
+    "text": "library(reticulate)\n\n# one-off setup (if you haven't done it yet)\n# install_miniconda()\n\n##conda_create(\n##  envname = \"hds-python\",\n##  python_version = \"3.11\",\n##  packages = c(\"numpy\", \"pandas\", \"matplotlib\", \"seaborn\", \"scikit-learn\")\n##)\n\nuse_condaenv(\"hds-python\", required = TRUE)\n#py_config()\n\n#conda_install(\"hds-python\", c(\"jupyter\", \"plotly\"))",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(1a) Fitting a logistic regression model - Python (scikit-learn)"
+    ]
+  },
+  {
+    "objectID": "logistic_regression_python.html#data-pima-indians-diabetes",
+    "href": "logistic_regression_python.html#data-pima-indians-diabetes",
+    "title": "(1a) Fitting a logistic regression model - Python (scikit-learn)",
+    "section": "Data: Pima Indians Diabetes",
+    "text": "Data: Pima Indians Diabetes\n\nimport pandas as pd\n\n\nurl=\"https://raw.githubusercontent.com/npradaschnor/Pima-Indians-Diabetes-Dataset/master/diabetes.csv\"\npima= pd.read_csv(url)\n\npima = pima[[\"Glucose\", \"Outcome\", \"BloodPressure\", \"Age\"]]\npima[\"Diabetes_binary\"] = (pima[\"Outcome\"] == 1).astype(int)\npima.head()\n\n   Glucose  Outcome  BloodPressure  Age  Diabetes_binary\n0      148        1             72   50                1\n1       85        0             66   31                0\n2      183        1             64   32                1\n3       89        0             66   21                0\n4      137        1             40   33                1",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(1a) Fitting a logistic regression model - Python (scikit-learn)"
+    ]
+  },
+  {
+    "objectID": "logistic_regression_python.html#logistic-regression-with-scikit-learn",
+    "href": "logistic_regression_python.html#logistic-regression-with-scikit-learn",
+    "title": "(1a) Fitting a logistic regression model - Python (scikit-learn)",
+    "section": "Logistic regression with scikit-learn",
+    "text": "Logistic regression with scikit-learn\n\nfrom sklearn.linear_model import LogisticRegression\n\nX = pima[[\"Glucose\"]].values\ny = pima[\"Diabetes_binary\"].values\n\nlog_reg = LogisticRegression(solver=\"lbfgs\")\nlog_reg.fit(X, y)\n\n\n\n\nLogisticRegression()\nIn a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.\n\n\nLogisticRegression\n\n?Documentation for LogisticRegressioniFitted\n\n        \n            Parameters\n\n\npenalty \n'l2'\n\n\n\ndual \nFalse\n\n\n\ntol \n0.0001\n\n\n\nC \n1.0\n\n\n\nfit_intercept \nTrue\n\n\n\nintercept_scaling \n1\n\n\n\nclass_weight \nNone\n\n\n\nrandom_state \nNone\n\n\n\nsolver \n'lbfgs'\n\n\n\nmax_iter \n100\n\n\n\nmulti_class \n'deprecated'\n\n\n\nverbose \n0\n\n\n\nwarm_start \nFalse\n\n\n\nn_jobs \nNone\n\n\n\nl1_ratio \nNone\n\n\n\n    \n\n\n\n\nlog_reg.intercept_, log_reg.coef_\n\n(array([-5.34990586]), array([[0.03787169]]))",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(1a) Fitting a logistic regression model - Python (scikit-learn)"
+    ]
+  },
+  {
+    "objectID": "logistic_regression_python.html#predictions-plots",
+    "href": "logistic_regression_python.html#predictions-plots",
+    "title": "(1a) Fitting a logistic regression model - Python (scikit-learn)",
+    "section": "Predictions & plots",
+    "text": "Predictions & plots\n\nprobs = log_reg.predict_proba(X)\npima[\"prob_diabetes_1\"] = probs[:, 1]\npima[\"prob_diabetes_0\"] = probs[:, 0]\npima.head()\n\n   Glucose  Outcome  ...  prob_diabetes_1  prob_diabetes_0\n0      148        1  ...         0.563432         0.436568\n1       85        0  ...         0.106138         0.893862\n2      183        1  ...         0.829291         0.170709\n3       89        0  ...         0.121391         0.878609\n4      137        1  ...         0.459716         0.540284\n\n[5 rows x 7 columns]\n\n\nWhich probability column do we want?",
+    "crumbs": [
+      "Supervised Learning:Logistic Regression",
+      "(1a) Fitting a logistic regression model - Python (scikit-learn)"
     ]
   }
 ]

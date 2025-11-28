@@ -1,0 +1,219 @@
+---
+title: "(2) Decision Threshold"
+format: html
+execute:
+  echo: true
+  message: false
+---
+
+## 1. Introduction
+
+In logistic regression, the model outputs a **probability**:
+
+\[
+\hat{p}(x) = P(Y=1 \mid x)
+\]
+
+But to turn this probability into a **class prediction**, we must choose a:
+
+# **Decision Threshold**
+
+Typically:  
+- If \(\hat{p}(x) \ge 0.5\) → predict **1**  
+- If \(\hat{p}(x) < 0.5\) → predict **0**
+
+But **0.5 is arbitrary**.  
+Changing the threshold changes:
+
+- True Positives (TP)  
+- False Positives (FP)  
+- True Negatives (TN)  
+- False Negatives (FN)
+
+We will explore this in detail later on too but lets get an idea: 
+
+---
+
+## 2. Load and prepare the data
+
+```{r}
+library(mlbench)
+library(tidyverse)
+library(tidymodels)
+
+data("PimaIndiansDiabetes")
+
+pima <- PimaIndiansDiabetes %>%
+  select(glucose, diabetes) %>%
+  mutate(
+    diabetes = fct_relevel(diabetes, "pos"),
+    diabetes_dummy = if_else(diabetes == "pos", 1, 0)
+  )
+```
+
+---
+
+## 3. Fit a logistic regression model using tidymodels
+
+```{r}
+log_spec <- 
+  logistic_reg(mode = "classification") %>%
+  set_engine("glm")
+
+log_fit <- 
+  log_spec %>%
+  fit(diabetes ~ glucose, data = pima)
+
+tidy(log_fit)
+```
+
+---
+
+## 4. Add predicted probabilities
+
+Lets make it easier to understand and just predict diabetes for the 15 first samples of our dataset
+
+```{r}
+prediction_pima <- 
+  predict(log_fit, new_data = pima[1:15,], type = "prob") %>%
+  rename(prob = .pred_pos)  %>%
+  dplyr::bind_cols(pima[1:15,])
+
+head(pima)
+```
+
+---
+
+## 5. Create predicted classes for different thresholds
+
+Then we want to assess how our final prediction changes based on the threshold we use
+
+```{r}
+prediction_pima <- prediction_pima %>%
+  mutate(
+    class_0.3 = if_else(prob >= 0.3, 1, 0),
+    class_0.5 = if_else(prob >= 0.5, 1, 0),
+    class_0.7 = if_else(prob >= 0.7, 1, 0)
+  )
+```
+
+---
+
+## 6. Visualise how probabilities look
+
+This is our predicted probabilities for each of the 10 samples (see that they are trying to make this sigmoid curve). They are coloured by their true diabetes label where (pos = 1 and neg = 0)
+
+```{r}
+ggplot(prediction_pima, aes(x = glucose, y = prob, colour = diabetes)) +
+  geom_point(size = 2, alpha = 0.7) +
+  geom_hline(yintercept = 0.3, colour = "blue", linetype = "dashed") +
+  geom_hline(yintercept = 0.5, colour = "red", linetype = "dashed") +
+  geom_hline(yintercept = 0.7, colour = "purple", linetype = "dashed") +
+  labs(
+    x = "Glucose",
+    y = "Predicted probability of diabetes",
+    title = "Predicted probabilities with threshold lines"
+  ) +
+  theme_minimal()
+```
+
+---
+
+## 7. Confusion tables
+
+### Threshold = 0.3
+```{r}
+table(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.3)
+```
+
+### Threshold = 0.5
+```{r}
+table(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.5)
+```
+
+### Threshold = 0.7
+```{r}
+table(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.7)
+```
+
+---
+
+## 8. Compare thresholds side-by-side
+
+```{r}
+threshold_compare <- tibble(
+  threshold = c("0.3", "0.5", "0.7"),
+  TP = c(
+    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.3 == 1),
+    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.5 == 1),
+    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.7 == 1)
+  ),
+  FP = c(
+    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.3 == 1),
+    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.5 == 1),
+    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.7 == 1)
+  ),
+  FN = c(
+    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.3 == 0),
+    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.5 == 0),
+    sum(prediction_pima$diabetes_dummy == 1 & prediction_pima$class_0.7 == 0)
+  ),
+  TN = c(
+    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.3 == 0),
+    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.5 == 0),
+    sum(prediction_pima$diabetes_dummy == 0 & prediction_pima$class_0.7 == 0)
+  )
+)
+
+threshold_compare
+```
+
+---
+
+
+**Changing the decision threshold changes the type of mistakes the model makes**.  
+A low threshold increases **sensitivity** (more positives detected).  
+A high threshold increases **specificity** (fewer false positives).  
+
+Checkout this graph for more insight to see what we mean by sensitivity and specificity 
+
+```{r}
+knitr::include_graphics("https://iq.opengenus.org/content/images/2021/11/summary.png")
+```
+
+```{r}
+threshold_metrics <- threshold_compare %>%
+  mutate(
+    Sensitivity = round(TP / (TP + FN), 3),
+    Specificity = round(TN / (TN + FP), 3)
+  )
+
+threshold_metrics
+
+```
+
+For the future, whenver youw nat to report the result of your classification model, we will need to understand how well it performs and so you will have to build a confusion matrix like the above shown. Instead of these tables, there are already curated packages to do so. We will go through it more in detail on Friday. But here is a snippet. 
+
+For instance, going back to `prediction_pima` if we want to report in a fianl confusion matrix our results with `threshold = 0.7` we can do the following:
+
+
+Confusion matrix using tidymodels
+
+```{r}
+
+#Set as factors the required columns: 
+prediction_pima$diabetes_dummy <- as.factor(prediction_pima$diabetes_dummy)
+prediction_pima$class_0.7 <- as.factor(prediction_pima$class_0.7)
+data <- data.frame(actual = prediction_pima$diabetes_dummy, predicted = prediction_pima$class_0.7)
+
+cm <- data %>%
+  conf_mat(truth = actual, estimate = predicted)
+
+cm
+```
+
+```{r}
+autoplot(cm, type = "heatmap") #what other types are there? 
+```
+```
+

@@ -154,8 +154,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
         <li class="sidebar-item">
- <span class="menu-text">decision_threshold.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="./decision_threshold.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">(2) Decision Threshold</span></a>
+  </div>
+</li>
     </ul>
 </div>
 </nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
@@ -379,11 +382,11 @@ Call:  stats::glm(formula = diabetes ~ glucose, family = stats::binomial,
 
 Coefficients:
 (Intercept)      glucose  
-    5.20800     -0.03666  
+    5.60587     -0.03996  
 
 Degrees of Freedom: 613 Total (i.e. Null);  612 Residual
 Null Deviance:      793.9 
-Residual Deviance: 654.4    AIC: 658.4</code></pre>
+Residual Deviance: 633.6    AIC: 637.6</code></pre>
 </div>
 </div>
 <p>Inspect the coefficients (these are <strong>log-odds / logit</strong> coefficients):</p>
@@ -394,8 +397,8 @@ Residual Deviance: 654.4    AIC: 658.4</code></pre>
 <pre><code># A tibble: 2 × 5
   term        estimate std.error statistic  p.value
   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 (Intercept)   5.21     0.464        11.2 3.44e-29
-2 glucose      -0.0367   0.00358     -10.2 1.34e-24</code></pre>
+1 (Intercept)   5.61     0.483        11.6 3.38e-31
+2 glucose      -0.0400   0.00373     -10.7 9.58e-27</code></pre>
 </div>
 </div>
 </section><section id="making-predictions-in-a-consistent-way" class="level3"><h3 class="anchored" data-anchor-id="making-predictions-in-a-consistent-way">2.4 Making predictions in a consistent way</h3>
@@ -411,12 +414,12 @@ Residual Deviance: 654.4    AIC: 658.4</code></pre>
 <pre><code># A tibble: 6 × 6
   .pred_pos .pred_neg glucose  mass   age diabetes
       &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   
-1    0.0872     0.913      78  31      26 pos     
-2    0.882      0.118     197  30.5    53 pos     
-3    0.176      0.824     100  30      32 pos     
-4    0.285      0.715     117  34.1    38 neg     
-5    0.138      0.862      92  19.9    28 neg     
-6    0.129      0.871      90  38.2    27 pos     </code></pre>
+1     0.114    0.886       89  28.1    21 neg     
+2     0.275    0.725      116  25.6    30 neg     
+3     0.267    0.733      115  34.6    32 pos     
+4     0.161    0.839       99  35.4    50 neg     
+5     0.903    0.0973     196  39.8    41 pos     
+6     0.110    0.890       88  24.8    22 neg     </code></pre>
 </div>
 </div>
 <p>We can visualise predicted probability vs.&nbsp;glucose:</p>
