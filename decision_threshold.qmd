@@ -10,33 +10,34 @@ execute:
 
 In logistic regression, the model outputs a **probability**:
 
-\[
+$$\
 \hat{p}(x) = P(Y=1 \mid x)
-\]
+$$
 
 But to turn this probability into a **class prediction**, we must choose a:
 
 # **Decision Threshold**
 
-Typically:  
-- If \(\hat{p}(x) \ge 0.5\) → predict **1**  
-- If \(\hat{p}(x) < 0.5\) → predict **0**
+Typically:\
+- If (p(x) \> 0.5) → predict **1**\
+- If (p(x) \< 0.5) → predict **0**
 
-But **0.5 is arbitrary**.  
+But **0.5 is arbitrary**.\
 Changing the threshold changes:
 
-- True Positives (TP)  
-- False Positives (FP)  
-- True Negatives (TN)  
-- False Negatives (FN)
+-   True Positives (TP)\
+-   False Positives (FP)\
+-   True Negatives (TN)\
+-   False Negatives (FN)
 
-We will explore this in detail later on too but lets get an idea: 
+We will explore this in detail later on too but lets get an idea:
 
----
+------------------------------------------------------------------------
 
 ## 2. Load and prepare the data
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
+
 library(mlbench)
 library(tidyverse)
 library(tidymodels)
@@ -51,7 +52,7 @@ pima <- PimaIndiansDiabetes %>%
   )
 ```
 
----
+------------------------------------------------------------------------
 
 ## 3. Fit a logistic regression model using tidymodels
 
@@ -67,7 +68,7 @@ log_fit <-
 tidy(log_fit)
 ```
 
----
+------------------------------------------------------------------------
 
 ## 4. Add predicted probabilities
 
@@ -82,7 +83,7 @@ prediction_pima <-
 head(pima)
 ```
 
----
+------------------------------------------------------------------------
 
 ## 5. Create predicted classes for different thresholds
 
@@ -97,7 +98,7 @@ prediction_pima <- prediction_pima %>%
   )
 ```
 
----
+------------------------------------------------------------------------
 
 ## 6. Visualise how probabilities look
 
@@ -117,26 +118,29 @@ ggplot(prediction_pima, aes(x = glucose, y = prob, colour = diabetes)) +
   theme_minimal()
 ```
 
----
+------------------------------------------------------------------------
 
 ## 7. Confusion tables
 
 ### Threshold = 0.3
+
 ```{r}
 table(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.3)
 ```
 
 ### Threshold = 0.5
+
 ```{r}
 table(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.5)
 ```
 
 ### Threshold = 0.7
+
 ```{r}
 table(True = prediction_pima$diabetes_dummy, Predicted = prediction_pima$class_0.7)
 ```
 
----
+------------------------------------------------------------------------
 
 ## 8. Compare thresholds side-by-side
 
@@ -168,14 +172,13 @@ threshold_compare <- tibble(
 threshold_compare
 ```
 
----
+------------------------------------------------------------------------
 
+**Changing the decision threshold changes the type of mistakes the model makes**.\
+A low threshold increases **sensitivity** (more positives detected).\
+A high threshold increases **specificity** (fewer false positives).
 
-**Changing the decision threshold changes the type of mistakes the model makes**.  
-A low threshold increases **sensitivity** (more positives detected).  
-A high threshold increases **specificity** (fewer false positives).  
-
-Checkout this graph for more insight to see what we mean by sensitivity and specificity 
+Checkout this graph for more insight to see what we mean by sensitivity and specificity
 
 ```{r}
 knitr::include_graphics("https://iq.opengenus.org/content/images/2021/11/summary.png")
@@ -192,10 +195,9 @@ threshold_metrics
 
 ```
 
-For the future, whenver youw nat to report the result of your classification model, we will need to understand how well it performs and so you will have to build a confusion matrix like the above shown. Instead of these tables, there are already curated packages to do so. We will go through it more in detail on Friday. But here is a snippet. 
+For the future, whenever you wat to report the result of your classification model, we will need to understand how well it performs and so you will have to build a confusion matrix like the above shown. Instead of these tables, there are already curated packages to do so. We will go through it more in detail later on in the course, but here is a snippet.
 
-For instance, going back to `prediction_pima` if we want to report in a fianl confusion matrix our results with `threshold = 0.7` we can do the following:
-
+For instance, going back to `prediction_pima` if we want to report in a final confusion matrix our results with `threshold = 0.7` we can do the following:
 
 Confusion matrix using tidymodels
 
@@ -215,5 +217,5 @@ cm
 ```{r}
 autoplot(cm, type = "heatmap") #what other types are there? 
 ```
-```
 
+\`\`\`

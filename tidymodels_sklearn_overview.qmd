@@ -8,7 +8,7 @@ execute:
   message: false
 ---
 
-```{r}
+```{r, include=FALSE}
 library(reticulate)
 
 # one-off setup (if you haven't done it yet)
@@ -55,9 +55,8 @@ Both provide a **unified, consistent interface** for models, preprocessing, pipe
 
 ::: callout-note
 **Docs:**  
-- Tidymodels homepage: <https://www.tidymodels.org/>  
-- Getting started: <https://www.tidymodels.org/start/>  
-- parsnip reference: <https://parsnip.tidymodels.org/reference/index.html>
+- Getting started with tidymodels: <https://www.tidymodels.org/start/>  
+- parsnip reference (all ML models available): <https://parsnip.tidymodels.org/reference/index.html>
 :::
 
 In **tidymodels**, we separate:
@@ -69,7 +68,7 @@ In **tidymodels**, we separate:
 
 We declare high-level models like this (classification / regression only, no engine yet):
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 #R
 library(tidymodels)
 
@@ -354,7 +353,7 @@ pipe.score(X_test, y_test)
 ---
 
 
-## 6. Summary: parsnip + tidymodels vs scikit-learn
+## 5. Summary: parsnip + tidymodels vs scikit-learn
 
 Both ecosystems share the **same design philosophy**:
 

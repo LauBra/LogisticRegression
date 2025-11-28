@@ -27,11 +27,11 @@ cat(sprintf("Log-odds: %.2f\n", log_odds))
 
 - **Probability**: chances of the event happening, between 0 and 1.  
 - **Odds**: ratio of probability of the event to probability of *no* event  
-  \[ \text{odds} = \frac{p}{1-p} \]
+  $$ \text{odds} = \frac{p}{1-p} $$
 - **Log-odds (logit)**: natural log of the odds  
-  \[ \text{logit}(p) = \log\left(\frac{p}{1-p}\right) \]
+  $$ \text{logit}(p) = \log\left(\frac{p}{1-p}\right) $$
 
-Log-odds are unbounded (from \(-\infty\) to \(+\infty\)) and **this is what the logistic regression model is linear in**.
+Log-odds are unbounded and **this is what the logistic regression model is linear in**.
 
 ---
 
@@ -39,7 +39,7 @@ Log-odds are unbounded (from \(-\infty\) to \(+\infty\)) and **this is what the 
 
 We will use the `PimaIndiansDiabetes` data from the **mlbench** package and keep only a few variables for now as in other exercises.
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 #| label: load-data
 library(mlbench)
 library(tidyverse)
@@ -121,16 +121,16 @@ tidy(logistic_fit_glucose)
 
 This corresponds to the model
 
-\[
+$$
 \text{logit}\left(P(\text{diabetes} = \text{pos} \mid \text{glucose})\right)
 = \beta_0 + \beta_1 \cdot \text{glucose}.
-\]
+$$
 
 To get the **probability** for a given glucose value, we apply the logistic (sigmoid) function:
 
-\[
+$$
 p(\text{diabetes} = \text{pos}) = \frac{1}{1 + \exp\left(-(\beta_0 + \beta_1 \cdot \text{glucose})\right)}.
-\]
+$$
 
 ---
 
@@ -161,7 +161,7 @@ cat("Probability at glucose = 120:", round(prob_120, 3), "\n")
 
 ## 5. Making predictions with tidymodels
 
-`augment()` from **broom**/**broom.mixed** (loaded through `tidymodels`) makes it easy to attach predictions to the data.
+
 
 ```{r}
 
@@ -169,6 +169,8 @@ pima_preds_glucose <-
   predict(logistic_fit_glucose, new_data = pima, type = "prob") %>% # type = "prob" gives a column for each class probability
   rename(prob_pos = .pred_pos, prob_neg = .pred_neg) %>%
   dplyr::bind_cols(pima)
+
+#can also check the function augment instead of predict!
 
 pima_preds_glucose %>%
   select(glucose, diabetes, prob_pos, prob_neg) %>%

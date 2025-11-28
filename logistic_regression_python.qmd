@@ -6,7 +6,7 @@ execute:
   message: false
 ---
 
-```{r}
+```{r, include=FALSE}
 library(reticulate)
 
 # one-off setup (if you haven't done it yet)

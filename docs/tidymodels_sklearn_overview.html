@@ -192,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#scikit-learn-pipeline-python" id="toc-scikit-learn-pipeline-python" class="nav-link" data-scroll-target="#scikit-learn-pipeline-python">4.2 Scikit-learn Pipeline (Python)</a></li>
   </ul>
 </li>
-  <li><a href="#summary-parsnip-tidymodels-vs-scikit-learn" id="toc-summary-parsnip-tidymodels-vs-scikit-learn" class="nav-link" data-scroll-target="#summary-parsnip-tidymodels-vs-scikit-learn">6. Summary: parsnip + tidymodels vs scikit-learn</a></li>
+  <li><a href="#summary-parsnip-tidymodels-vs-scikit-learn" id="toc-summary-parsnip-tidymodels-vs-scikit-learn" class="nav-link" data-scroll-target="#summary-parsnip-tidymodels-vs-scikit-learn">5. Summary: parsnip + tidymodels vs scikit-learn</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -211,24 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header><div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/">reticulate</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># one-off setup (if you haven't done it yet)</span></span>
-<span><span class="co"># install_miniconda()</span></span>
-<span></span>
-<span><span class="co">##conda_create(</span></span>
-<span><span class="co">##  envname = "hds-python",</span></span>
-<span><span class="co">##  python_version = "3.11",</span></span>
-<span><span class="co">##  packages = c("numpy", "pandas", "matplotlib", "seaborn", "scikit-learn")</span></span>
-<span><span class="co">##)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/use_python.html">use_condaenv</a></span><span class="op">(</span><span class="st">"hds-python"</span>, required <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#py_config()</span></span>
-<span></span>
-<span><span class="co">#conda_install("hds-python", c("jupyter", "plotly"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="why-frameworks-like-tidymodels-and-scikit-learn" class="level2"><h2 class="anchored" data-anchor-id="why-frameworks-like-tidymodels-and-scikit-learn">1. Why frameworks like tidymodels and scikit-learn?</h2>
+</header><section id="why-frameworks-like-tidymodels-and-scikit-learn" class="level2"><h2 class="anchored" data-anchor-id="why-frameworks-like-tidymodels-and-scikit-learn">1. Why frameworks like tidymodels and scikit-learn?</h2>
 <p>In both <strong>R</strong> and <strong>Python</strong>, there are many ways to fit models:</p>
 <ul>
 <li>R: <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code>, <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>, <code>rpart()</code>, <code>randomForest()</code>, <code>xgboost()</code>, …</li>
@@ -265,9 +248,8 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p><strong>Docs:</strong><br>
-- Tidymodels homepage: <a href="https://www.tidymodels.org/" class="uri">https://www.tidymodels.org/</a><br>
-- Getting started: <a href="https://www.tidymodels.org/start/" class="uri">https://www.tidymodels.org/start/</a><br>
-- parsnip reference: <a href="https://parsnip.tidymodels.org/reference/index.html" class="uri">https://parsnip.tidymodels.org/reference/index.html</a></p>
+- Getting started with tidymodels: <a href="https://www.tidymodels.org/start/" class="uri">https://www.tidymodels.org/start/</a><br>
+- parsnip reference (all ML models available): <a href="https://parsnip.tidymodels.org/reference/index.html" class="uri">https://parsnip.tidymodels.org/reference/index.html</a></p>
 </div>
 </div>
 <p>In <strong>tidymodels</strong>, we separate:</p>
@@ -282,29 +264,10 @@ Note
 <section id="model-specification" class="level3"><h3 class="anchored" data-anchor-id="model-specification">2.1 Model specification</h3>
 <p>We declare high-level models like this (classification / regression only, no engine yet):</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>✔ broom        1.0.10     ✔ recipes      1.3.1 
-✔ dials        1.4.2      ✔ rsample      1.3.1 
-✔ dplyr        1.1.4      ✔ tailor       0.1.0 
-✔ ggplot2      4.0.0      ✔ tidyr        1.3.1 
-✔ infer        1.0.9      ✔ tune         2.0.1 
-✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-✔ parsnip      1.3.3      ✔ workflowsets 1.1.1 
-✔ purrr        1.2.0      ✔ yardstick    1.3.2 </code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-✖ purrr::discard() masks scales::discard()
-✖ dplyr::filter()  masks stats::filter()
-✖ dplyr::lag()     masks stats::lag()
-✖ recipes::step()  masks stats::step()</code></pre>
-</div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">log_spec</span>   <span class="op">&lt;-</span> <span class="fu">logistic_reg</span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">log_spec</span>   <span class="op">&lt;-</span> <span class="fu">logistic_reg</span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span></span>
 <span><span class="va">tree_spec</span>  <span class="op">&lt;-</span> <span class="fu">decision_tree</span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span></span>
 <span><span class="va">rf_spec</span>    <span class="op">&lt;-</span> <span class="fu">rand_forest</span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"regression"</span><span class="op">)</span></span>
 <span><span class="va">knn_spec</span>   <span class="op">&lt;-</span> <span class="fu">nearest_neighbor</span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span></span>
@@ -315,7 +278,7 @@ Note
 
 Computational engine: glm </code></pre>
 </div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tree_spec</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tree_spec</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Decision Tree Model Specification (classification)
 
@@ -330,7 +293,7 @@ Computational engine: rpart </code></pre>
 </ul></section><section id="engines-how-the-model-is-actually-fit" class="level3"><h3 class="anchored" data-anchor-id="engines-how-the-model-is-actually-fit">2.2 Engines: how the model is actually fit</h3>
 <p>The <strong>engine</strong> is the backend algorithm. We choose it with <code>set_engine()</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
 <span><span class="va">log_spec_glm</span> <span class="op">&lt;-</span> <span class="fu">logistic_reg</span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glm"</span><span class="op">)</span>      <span class="co"># uses base R glm() with binomial family</span></span>
 <span></span>
@@ -347,7 +310,7 @@ Computational engine: rpart </code></pre>
 </section><section id="fitting-a-logistic-regression-model-with-tidymodels" class="level3"><h3 class="anchored" data-anchor-id="fitting-a-logistic-regression-model-with-tidymodels">2.3 Fitting a logistic regression model with tidymodels</h3>
 <p>Below we use the Pima Indians diabetes data and compare to the <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> style you already know.</p>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mlbench</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"PimaIndiansDiabetes"</span><span class="op">)</span></span>
 <span></span>
@@ -367,7 +330,7 @@ Computational engine: rpart </code></pre>
 </div>
 <p>Fit the model using <code>fit()</code> with a formula interface:</p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
 <span><span class="va">logistic_fit</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">logistic_spec</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">fit</span><span class="op">(</span><span class="va">diabetes</span> <span class="op">~</span> <span class="va">glucose</span>, data <span class="op">=</span> <span class="va">pima_train</span><span class="op">)</span></span>
@@ -382,29 +345,29 @@ Call:  stats::glm(formula = diabetes ~ glucose, family = stats::binomial,
 
 Coefficients:
 (Intercept)      glucose  
-    5.60587     -0.03996  
+    5.54880     -0.03935  
 
 Degrees of Freedom: 613 Total (i.e. Null);  612 Residual
 Null Deviance:      793.9 
-Residual Deviance: 633.6    AIC: 637.6</code></pre>
+Residual Deviance: 638.2    AIC: 642.2</code></pre>
 </div>
 </div>
 <p>Inspect the coefficients (these are <strong>log-odds / logit</strong> coefficients):</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
 <span><span class="fu">tidy</span><span class="op">(</span><span class="va">logistic_fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 5
   term        estimate std.error statistic  p.value
   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 (Intercept)   5.61     0.483        11.6 3.38e-31
-2 glucose      -0.0400   0.00373     -10.7 9.58e-27</code></pre>
+1 (Intercept)   5.55     0.481        11.5 8.47e-31
+2 glucose      -0.0393   0.00371     -10.6 2.53e-26</code></pre>
 </div>
 </div>
 </section><section id="making-predictions-in-a-consistent-way" class="level3"><h3 class="anchored" data-anchor-id="making-predictions-in-a-consistent-way">2.4 Making predictions in a consistent way</h3>
 <p>All parsnip models support the same <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> interface:</p>
 <div class="cell">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
 <span><span class="va">pima_preds</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">logistic_fit</span>, new_data <span class="op">=</span> <span class="va">pima_test</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span><span class="va">pima_test</span><span class="op">)</span></span>
@@ -414,17 +377,17 @@ Residual Deviance: 633.6    AIC: 637.6</code></pre>
 <pre><code># A tibble: 6 × 6
   .pred_pos .pred_neg glucose  mass   age diabetes
       &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   
-1     0.114    0.886       89  28.1    21 neg     
-2     0.275    0.725      116  25.6    30 neg     
-3     0.267    0.733      115  34.6    32 pos     
-4     0.161    0.839       99  35.4    50 neg     
-5     0.903    0.0973     196  39.8    41 pos     
-6     0.110    0.890       88  24.8    22 neg     </code></pre>
+1     0.568     0.432     148  33.6    50 pos     
+2     0.839     0.161     183  23.3    32 pos     
+3     0.264     0.736     115  35.3    29 neg     
+4     0.228     0.772     110  37.6    30 neg     
+5     0.743     0.257     168  38      34 pos     
+6     0.288     0.712     118  45.8    31 pos     </code></pre>
 </div>
 </div>
 <p>We can visualise predicted probability vs.&nbsp;glucose:</p>
 <div class="cell">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">pima_preds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">glucose</span>, y <span class="op">=</span> <span class="va">.pred_pos</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -457,7 +420,7 @@ Residual Deviance: 633.6    AIC: 637.6</code></pre>
 <code>workflows</code> → combine a model + recipe into a single object</li>
 </ul>
 <div class="cell">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
 <span><span class="va">log_recipe</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">recipe</span><span class="op">(</span><span class="va">diabetes</span> <span class="op">~</span> <span class="va">glucose</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">mass</span>, data <span class="op">=</span> <span class="va">pima</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -512,9 +475,9 @@ Note
 </div>
 </div>
 <p>In <strong>scikit-learn</strong>, all models follow the same <strong>estimator API</strong>:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SomeEstimator(hyperparameters)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SomeEstimator(hyperparameters)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Examples:</p>
 <ul>
 <li>
@@ -533,28 +496,28 @@ Note
 </ul>
 <section id="a-simple-logistic-regression-in-scikit-learn" class="level3"><h3 class="anchored" data-anchor-id="a-simple-logistic-regression-in-scikit-learn">3.1 A simple logistic regression in scikit-learn</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> load_breast_cancer()</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data.data</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> data.target   <span class="co"># 0 = malignant, 1 = benign</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Train / test split</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Define model (specification)</span></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>log_reg <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>,</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    solver<span class="op">=</span><span class="st">"liblinear"</span>)</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit model</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>log_reg.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> load_breast_cancer()</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data.data</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> data.target   <span class="co"># 0 = malignant, 1 = benign</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Train / test split</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Define model (specification)</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>log_reg <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    solver<span class="op">=</span><span class="st">"liblinear"</span>)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit model</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>log_reg.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <style>#sk-container-id-1 {
   /* Definition of color scheme common for light and dark mode */
@@ -1170,9 +1133,9 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 });
 </script>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> log_reg.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> log_reg.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here:</p>
 <ul>
@@ -1182,9 +1145,9 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </ul></section><section id="probabilities-and-log-odds-logits" class="level3"><h3 class="anchored" data-anchor-id="probabilities-and-log-odds-logits">3.2 Probabilities and log-odds (logits)</h3>
 <p>We can access predicted probabilities with <code>predict_proba</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> log_reg.predict_proba(X_test)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>y_proba[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> log_reg.predict_proba(X_test)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>y_proba[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([[7.09013048e-01, 2.90986952e-01],
        [1.07801108e-02, 9.89219889e-01],
@@ -1204,7 +1167,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 <section id="tidymodels-workflow-r" class="level3"><h3 class="anchored" data-anchor-id="tidymodels-workflow-r">4.1 Tidymodels workflow (R)</h3>
 <p>We already saw:</p>
 <div class="cell">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#R</span></span>
 <span><span class="va">log_recipe</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">recipe</span><span class="op">(</span><span class="va">diabetes</span> <span class="op">~</span> <span class="va">glucose</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">mass</span>, data <span class="op">=</span> <span class="va">pima</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -1233,20 +1196,20 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 </ul></section><section id="scikit-learn-pipeline-python" class="level3"><h3 class="anchored" data-anchor-id="scikit-learn-pipeline-python">4.2 Scikit-learn Pipeline (Python)</h3>
 <p>The scikit-learn equivalent uses <code>Pipeline</code> and transformers:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> Pipeline([</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"scale"</span>, StandardScaler()),          <span class="co"># preprocessing step</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"log_reg"</span>, LogisticRegression(</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    max_iter<span class="op">=</span><span class="dv">1000</span>,</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    solver<span class="op">=</span><span class="st">"liblinear"</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>pipe.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> Pipeline([</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"scale"</span>, StandardScaler()),          <span class="co"># preprocessing step</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"log_reg"</span>, LogisticRegression(</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    max_iter<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    solver<span class="op">=</span><span class="st">"liblinear"</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>pipe.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <style>#sk-container-id-2 {
   /* Definition of color scheme common for light and dark mode */
@@ -1921,7 +1884,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 });
 </script>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>pipe.score(X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pipe.score(X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.9883040935672515</code></pre>
 </div>
@@ -1936,7 +1899,7 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
 <li>
 <code>Pipeline</code> = links them, ensures the <strong>same transformations</strong> are applied in training and testing.</li>
 </ul>
-<hr></section></section><section id="summary-parsnip-tidymodels-vs-scikit-learn" class="level2"><h2 class="anchored" data-anchor-id="summary-parsnip-tidymodels-vs-scikit-learn">6. Summary: parsnip + tidymodels vs scikit-learn</h2>
+<hr></section></section><section id="summary-parsnip-tidymodels-vs-scikit-learn" class="level2"><h2 class="anchored" data-anchor-id="summary-parsnip-tidymodels-vs-scikit-learn">5. Summary: parsnip + tidymodels vs scikit-learn</h2>
 <p>Both ecosystems share the <strong>same design philosophy</strong>:</p>
 <ol type="1">
 <li>
@@ -2416,376 +2379,375 @@ document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb30" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "(0) Unified Modelling Frameworks in R &amp; Python"</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="co"># one-off setup (if you haven't done it yet)</span></span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="co"># install_miniconda()</span></span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="do">##conda_create(</span></span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="do">##  envname = "hds-python",</span></span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="do">##  python_version = "3.11",</span></span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="do">##  packages = c("numpy", "pandas", "matplotlib", "seaborn", "scikit-learn")</span></span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="do">##)</span></span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="st">"hds-python"</span>, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="co">#py_config()</span></span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a><span class="co">#conda_install("hds-python", c("jupyter", "plotly"))</span></span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Why frameworks like tidymodels and scikit-learn?</span></span>
-<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>In both **R** and **Python**, there are many ways to fit models:</span>
-<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>R: <span class="in">`lm()`</span>, <span class="in">`glm()`</span>, <span class="in">`rpart()`</span>, <span class="in">`randomForest()`</span>, <span class="in">`xgboost()`</span>, ...</span>
-<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Python: <span class="in">`statsmodels`</span>, custom NumPy/SciPy code, or many different classes in <span class="in">`sklearn`</span></span>
-<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>Each function or class often has its own syntax, argument names and prediction methods.  </span>
-<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>This becomes difficult when we want to:</span>
-<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>swap one model for another,</span>
-<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>compare models fairly,</span>
-<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>build **end-to-end pipelines** with preprocessing + model + evaluation,</span>
-<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>do **hyperparameter tuning** cleanly and without data leakage.</span>
-<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>Two ecosystems help us solve this:</span>
-<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**tidymodels** in R  </span>
-<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**scikit-learn** in Python</span>
-<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>Both provide a **unified, consistent interface** for models, preprocessing, pipelines and tuning.</span>
-<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Tidymodels (R): model *specification* + *engine*</span></span>
-<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>**Docs:**  </span>
-<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tidymodels homepage: <span class="ot">&lt;https://www.tidymodels.org/&gt;</span>  </span>
-<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Getting started: <span class="ot">&lt;https://www.tidymodels.org/start/&gt;</span>  </span>
-<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>parsnip reference: <span class="ot">&lt;https://parsnip.tidymodels.org/reference/index.html&gt;</span></span>
-<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>In **tidymodels**, we separate:</span>
-<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**What kind of model we want** → the *specification*  </span>
-<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**How it is implemented** → the *engine*</span>
-<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1 Model specification</span></span>
-<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a>We declare high-level models like this (classification / regression only, no engine yet):</span>
-<span id="cb30-73"><a href="#cb30-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-76"><a href="#cb30-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-77"><a href="#cb30-77" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
-<span id="cb30-78"><a href="#cb30-78" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
-<span id="cb30-79"><a href="#cb30-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-80"><a href="#cb30-80" aria-hidden="true" tabindex="-1"></a>log_spec   <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>)</span>
-<span id="cb30-81"><a href="#cb30-81" aria-hidden="true" tabindex="-1"></a>tree_spec  <span class="ot">&lt;-</span> <span class="fu">decision_tree</span>(<span class="at">mode =</span> <span class="st">"classification"</span>)</span>
-<span id="cb30-82"><a href="#cb30-82" aria-hidden="true" tabindex="-1"></a>rf_spec    <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(<span class="at">mode =</span> <span class="st">"regression"</span>)</span>
-<span id="cb30-83"><a href="#cb30-83" aria-hidden="true" tabindex="-1"></a>knn_spec   <span class="ot">&lt;-</span> <span class="fu">nearest_neighbor</span>(<span class="at">mode =</span> <span class="st">"classification"</span>)</span>
-<span id="cb30-84"><a href="#cb30-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-85"><a href="#cb30-85" aria-hidden="true" tabindex="-1"></a>log_spec</span>
-<span id="cb30-86"><a href="#cb30-86" aria-hidden="true" tabindex="-1"></a>tree_spec</span>
-<span id="cb30-87"><a href="#cb30-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-88"><a href="#cb30-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-89"><a href="#cb30-89" aria-hidden="true" tabindex="-1"></a>This does **not** fit a model yet. It just says:</span>
-<span id="cb30-90"><a href="#cb30-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-91"><a href="#cb30-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>"I want a logistic regression classifier"</span>
-<span id="cb30-92"><a href="#cb30-92" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>"I want a decision tree for classification"</span>
-<span id="cb30-93"><a href="#cb30-93" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>etc.</span>
-<span id="cb30-94"><a href="#cb30-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-95"><a href="#cb30-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.2 Engines: how the model is actually fit</span></span>
-<span id="cb30-96"><a href="#cb30-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-97"><a href="#cb30-97" aria-hidden="true" tabindex="-1"></a>The **engine** is the backend algorithm. We choose it with <span class="in">`set_engine()`</span>:</span>
-<span id="cb30-98"><a href="#cb30-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-101"><a href="#cb30-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-102"><a href="#cb30-102" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
-<span id="cb30-103"><a href="#cb30-103" aria-hidden="true" tabindex="-1"></a>log_spec_glm <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-104"><a href="#cb30-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>)      <span class="co"># uses base R glm() with binomial family</span></span>
-<span id="cb30-105"><a href="#cb30-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-106"><a href="#cb30-106" aria-hidden="true" tabindex="-1"></a>log_spec_glmnet <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-107"><a href="#cb30-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)   <span class="co"># uses penalised regression (elastic net)</span></span>
-<span id="cb30-108"><a href="#cb30-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-109"><a href="#cb30-109" aria-hidden="true" tabindex="-1"></a>tree_spec_rpart <span class="ot">&lt;-</span> <span class="fu">decision_tree</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-110"><a href="#cb30-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"rpart"</span>)    <span class="co"># uses rpart (CART)</span></span>
-<span id="cb30-111"><a href="#cb30-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-112"><a href="#cb30-112" aria-hidden="true" tabindex="-1"></a>boost_spec_xgb <span class="ot">&lt;-</span> <span class="fu">boost_tree</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-113"><a href="#cb30-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"xgboost"</span>)  <span class="co"># uses xgboost library</span></span>
-<span id="cb30-114"><a href="#cb30-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-115"><a href="#cb30-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-116"><a href="#cb30-116" aria-hidden="true" tabindex="-1"></a>Different **engines** = different **algorithms** for the same *kind* of model.</span>
-<span id="cb30-117"><a href="#cb30-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-118"><a href="#cb30-118" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3 Fitting a logistic regression model with tidymodels</span></span>
-<span id="cb30-119"><a href="#cb30-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-120"><a href="#cb30-120" aria-hidden="true" tabindex="-1"></a>Below we use the Pima Indians diabetes data and compare to the <span class="in">`glm()`</span> style you already know.</span>
-<span id="cb30-121"><a href="#cb30-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-124"><a href="#cb30-124" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-125"><a href="#cb30-125" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
-<span id="cb30-126"><a href="#cb30-126" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbench)</span>
-<span id="cb30-127"><a href="#cb30-127" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"PimaIndiansDiabetes"</span>)</span>
-<span id="cb30-128"><a href="#cb30-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-129"><a href="#cb30-129" aria-hidden="true" tabindex="-1"></a>pima <span class="ot">&lt;-</span> PimaIndiansDiabetes <span class="sc">%&gt;%</span></span>
-<span id="cb30-130"><a href="#cb30-130" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(glucose, mass, age, diabetes) <span class="sc">%&gt;%</span></span>
-<span id="cb30-131"><a href="#cb30-131" aria-hidden="true" tabindex="-1"></a>  <span class="co"># we want "pos" (diabetes present) as the event of interest</span></span>
-<span id="cb30-132"><a href="#cb30-132" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">diabetes =</span> forcats<span class="sc">::</span><span class="fu">fct_relevel</span>(diabetes, <span class="st">"pos"</span>)) <span class="co"># here we are saying that what we are trying to predict (i=our positive, 1 class is "pos")</span></span>
-<span id="cb30-133"><a href="#cb30-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-134"><a href="#cb30-134" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(pima, <span class="at">prop =</span> <span class="fl">0.8</span>, <span class="at">strata =</span> diabetes)</span>
-<span id="cb30-135"><a href="#cb30-135" aria-hidden="true" tabindex="-1"></a>pima_train <span class="ot">&lt;-</span> <span class="fu">training</span>(split)</span>
-<span id="cb30-136"><a href="#cb30-136" aria-hidden="true" tabindex="-1"></a>pima_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(split)</span>
-<span id="cb30-137"><a href="#cb30-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-138"><a href="#cb30-138" aria-hidden="true" tabindex="-1"></a><span class="co"># Model spec + engine</span></span>
-<span id="cb30-139"><a href="#cb30-139" aria-hidden="true" tabindex="-1"></a>logistic_spec <span class="ot">&lt;-</span></span>
-<span id="cb30-140"><a href="#cb30-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-141"><a href="#cb30-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>)   <span class="co"># internally: glm(..., family = binomial)</span></span>
-<span id="cb30-142"><a href="#cb30-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-143"><a href="#cb30-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-144"><a href="#cb30-144" aria-hidden="true" tabindex="-1"></a>Fit the model using <span class="in">`fit()`</span> with a formula interface:</span>
-<span id="cb30-145"><a href="#cb30-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-148"><a href="#cb30-148" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-149"><a href="#cb30-149" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
-<span id="cb30-150"><a href="#cb30-150" aria-hidden="true" tabindex="-1"></a>logistic_fit <span class="ot">&lt;-</span></span>
-<span id="cb30-151"><a href="#cb30-151" aria-hidden="true" tabindex="-1"></a>  logistic_spec <span class="sc">%&gt;%</span></span>
-<span id="cb30-152"><a href="#cb30-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(diabetes <span class="sc">~</span> glucose, <span class="at">data =</span> pima_train)</span>
-<span id="cb30-153"><a href="#cb30-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-154"><a href="#cb30-154" aria-hidden="true" tabindex="-1"></a>logistic_fit</span>
-<span id="cb30-155"><a href="#cb30-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-156"><a href="#cb30-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-157"><a href="#cb30-157" aria-hidden="true" tabindex="-1"></a>Inspect the coefficients (these are **log-odds / logit** coefficients):</span>
-<span id="cb30-158"><a href="#cb30-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-161"><a href="#cb30-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-162"><a href="#cb30-162" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
-<span id="cb30-163"><a href="#cb30-163" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(logistic_fit)</span>
-<span id="cb30-164"><a href="#cb30-164" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-165"><a href="#cb30-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-166"><a href="#cb30-166" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.4 Making predictions in a consistent way</span></span>
-<span id="cb30-167"><a href="#cb30-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-168"><a href="#cb30-168" aria-hidden="true" tabindex="-1"></a>All parsnip models support the same <span class="in">`predict()`</span> interface:</span>
-<span id="cb30-169"><a href="#cb30-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-172"><a href="#cb30-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-173"><a href="#cb30-173" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
-<span id="cb30-174"><a href="#cb30-174" aria-hidden="true" tabindex="-1"></a>pima_preds <span class="ot">&lt;-</span></span>
-<span id="cb30-175"><a href="#cb30-175" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(logistic_fit, <span class="at">new_data =</span> pima_test, <span class="at">type =</span> <span class="st">"prob"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-176"><a href="#cb30-176" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_cols</span>(pima_test)</span>
-<span id="cb30-177"><a href="#cb30-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-178"><a href="#cb30-178" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pima_preds)</span>
-<span id="cb30-179"><a href="#cb30-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-180"><a href="#cb30-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-181"><a href="#cb30-181" aria-hidden="true" tabindex="-1"></a>We can visualise predicted probability vs. glucose:</span>
-<span id="cb30-182"><a href="#cb30-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-185"><a href="#cb30-185" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-186"><a href="#cb30-186" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
-<span id="cb30-187"><a href="#cb30-187" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb30-188"><a href="#cb30-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-189"><a href="#cb30-189" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pima_preds, <span class="fu">aes</span>(<span class="at">x =</span> glucose, <span class="at">y =</span> .pred_pos)) <span class="sc">+</span></span>
-<span id="cb30-190"><a href="#cb30-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb30-191"><a href="#cb30-191" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb30-192"><a href="#cb30-192" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Glucose"</span>,</span>
-<span id="cb30-193"><a href="#cb30-193" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Predicted probability of diabetes (pos)"</span></span>
-<span id="cb30-194"><a href="#cb30-194" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb30-195"><a href="#cb30-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb30-196"><a href="#cb30-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-197"><a href="#cb30-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-198"><a href="#cb30-198" aria-hidden="true" tabindex="-1"></a>Here:</span>
-<span id="cb30-199"><a href="#cb30-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-200"><a href="#cb30-200" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`.pred_pos`</span> = predicted <span class="sc">\(</span> P(\text{diabetes} = \text{"pos"}) <span class="sc">\)</span></span>
-<span id="cb30-201"><a href="#cb30-201" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`.pred_neg`</span> (not shown here) = predicted <span class="sc">\(</span> P(\text{"neg"}) <span class="sc">\)</span></span>
-<span id="cb30-202"><a href="#cb30-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-203"><a href="#cb30-203" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.5 Recipes + workflows (pipelines in tidymodels)</span></span>
-<span id="cb30-204"><a href="#cb30-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-205"><a href="#cb30-205" aria-hidden="true" tabindex="-1"></a>Tidymodels also includes tools for **preprocessing** and **pipelines**:</span>
-<span id="cb30-206"><a href="#cb30-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-207"><a href="#cb30-207" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`recipes`</span> → scaling, imputation, one-hot encoding, etc.  </span>
-<span id="cb30-208"><a href="#cb30-208" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`workflows`</span> → combine a model + recipe into a single object</span>
-<span id="cb30-209"><a href="#cb30-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-212"><a href="#cb30-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-213"><a href="#cb30-213" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
-<span id="cb30-214"><a href="#cb30-214" aria-hidden="true" tabindex="-1"></a>log_recipe <span class="ot">&lt;-</span></span>
-<span id="cb30-215"><a href="#cb30-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(diabetes <span class="sc">~</span> glucose <span class="sc">+</span> age <span class="sc">+</span> mass, <span class="at">data =</span> pima) <span class="sc">%&gt;%</span></span>
-<span id="cb30-216"><a href="#cb30-216" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>())</span>
-<span id="cb30-217"><a href="#cb30-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-218"><a href="#cb30-218" aria-hidden="true" tabindex="-1"></a>log_workflow <span class="ot">&lt;-</span></span>
-<span id="cb30-219"><a href="#cb30-219" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb30-220"><a href="#cb30-220" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(logistic_spec) <span class="sc">%&gt;%</span></span>
-<span id="cb30-221"><a href="#cb30-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(log_recipe)</span>
-<span id="cb30-222"><a href="#cb30-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-223"><a href="#cb30-223" aria-hidden="true" tabindex="-1"></a>log_fit_multi <span class="ot">&lt;-</span> <span class="fu">fit</span>(log_workflow, <span class="at">data =</span> pima)</span>
-<span id="cb30-224"><a href="#cb30-224" aria-hidden="true" tabindex="-1"></a>log_fit_multi</span>
-<span id="cb30-225"><a href="#cb30-225" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-226"><a href="#cb30-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-227"><a href="#cb30-227" aria-hidden="true" tabindex="-1"></a>Notice, when we open in our environment the model created, it includes too, the preprocessing information!</span>
-<span id="cb30-228"><a href="#cb30-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-229"><a href="#cb30-229" aria-hidden="true" tabindex="-1"></a>This is similar in spirit to **scikit-learn pipelines**. </span>
-<span id="cb30-230"><a href="#cb30-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-231"><a href="#cb30-231" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb30-232"><a href="#cb30-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-233"><a href="#cb30-233" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Scikit-learn (Python): unified estimator API</span></span>
-<span id="cb30-234"><a href="#cb30-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-235"><a href="#cb30-235" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb30-236"><a href="#cb30-236" aria-hidden="true" tabindex="-1"></a>**Docs:**  </span>
-<span id="cb30-237"><a href="#cb30-237" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Scikit-learn homepage: <span class="ot">&lt;https://scikit-learn.org/stable/&gt;</span>  </span>
-<span id="cb30-238"><a href="#cb30-238" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>User guide: <span class="ot">&lt;https://scikit-learn.org/stable/user_guide.html&gt;</span>  </span>
-<span id="cb30-239"><a href="#cb30-239" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>API overview: <span class="ot">&lt;https://scikit-learn.org/stable/developers/develop.html#apis-of-scikit-learn-objects&gt;</span></span>
-<span id="cb30-240"><a href="#cb30-240" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb30-241"><a href="#cb30-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-242"><a href="#cb30-242" aria-hidden="true" tabindex="-1"></a>In **scikit-learn**, all models follow the same **estimator API**:</span>
-<span id="cb30-243"><a href="#cb30-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-244"><a href="#cb30-244" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb30-245"><a href="#cb30-245" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SomeEstimator(hyperparameters)</span>
-<span id="cb30-246"><a href="#cb30-246" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span>
-<span id="cb30-247"><a href="#cb30-247" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(X_test)</span>
-<span id="cb30-248"><a href="#cb30-248" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-249"><a href="#cb30-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-250"><a href="#cb30-250" aria-hidden="true" tabindex="-1"></a>Examples:</span>
-<span id="cb30-251"><a href="#cb30-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-252"><a href="#cb30-252" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LinearRegression`</span> (ordinary least squares)</span>
-<span id="cb30-253"><a href="#cb30-253" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LogisticRegression`</span> (classification)</span>
-<span id="cb30-254"><a href="#cb30-254" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`DecisionTreeClassifier`</span></span>
-<span id="cb30-255"><a href="#cb30-255" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`RandomForestClassifier`</span></span>
-<span id="cb30-256"><a href="#cb30-256" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`SVC`</span> (support vector classifier)</span>
-<span id="cb30-257"><a href="#cb30-257" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`KNeighborsClassifier`</span></span>
-<span id="cb30-258"><a href="#cb30-258" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`MLPClassifier`</span> (neural network)</span>
-<span id="cb30-259"><a href="#cb30-259" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Preprocessors like <span class="in">`StandardScaler`</span>, <span class="in">`OneHotEncoder`</span></span>
-<span id="cb30-260"><a href="#cb30-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-261"><a href="#cb30-261" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.1 A simple logistic regression in scikit-learn</span></span>
-<span id="cb30-262"><a href="#cb30-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-265"><a href="#cb30-265" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-266"><a href="#cb30-266" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
-<span id="cb30-267"><a href="#cb30-267" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
-<span id="cb30-268"><a href="#cb30-268" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb30-269"><a href="#cb30-269" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb30-270"><a href="#cb30-270" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
-<span id="cb30-271"><a href="#cb30-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-272"><a href="#cb30-272" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb30-273"><a href="#cb30-273" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> load_breast_cancer()</span>
-<span id="cb30-274"><a href="#cb30-274" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data.data</span>
-<span id="cb30-275"><a href="#cb30-275" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> data.target   <span class="co"># 0 = malignant, 1 = benign</span></span>
-<span id="cb30-276"><a href="#cb30-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-277"><a href="#cb30-277" aria-hidden="true" tabindex="-1"></a><span class="co"># Train / test split</span></span>
-<span id="cb30-278"><a href="#cb30-278" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
-<span id="cb30-279"><a href="#cb30-279" aria-hidden="true" tabindex="-1"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y</span>
-<span id="cb30-280"><a href="#cb30-280" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb30-281"><a href="#cb30-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-282"><a href="#cb30-282" aria-hidden="true" tabindex="-1"></a><span class="co"># Define model (specification)</span></span>
-<span id="cb30-283"><a href="#cb30-283" aria-hidden="true" tabindex="-1"></a>log_reg <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>,</span>
-<span id="cb30-284"><a href="#cb30-284" aria-hidden="true" tabindex="-1"></a>    solver<span class="op">=</span><span class="st">"liblinear"</span>)</span>
-<span id="cb30-285"><a href="#cb30-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-286"><a href="#cb30-286" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit model</span></span>
-<span id="cb30-287"><a href="#cb30-287" aria-hidden="true" tabindex="-1"></a>log_reg.fit(X_train, y_train)</span>
-<span id="cb30-288"><a href="#cb30-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-289"><a href="#cb30-289" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb30-290"><a href="#cb30-290" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> log_reg.predict(X_test)</span>
-<span id="cb30-291"><a href="#cb30-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-292"><a href="#cb30-292" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-293"><a href="#cb30-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-294"><a href="#cb30-294" aria-hidden="true" tabindex="-1"></a>Here:</span>
-<span id="cb30-295"><a href="#cb30-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-296"><a href="#cb30-296" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LogisticRegression(...)`</span> = model specification (similar to <span class="in">`logistic_reg()`</span> in parsnip)</span>
-<span id="cb30-297"><a href="#cb30-297" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Under the hood, it calls a numerical **solver** (e.g. <span class="in">`"lbfgs"`</span>, <span class="in">`"liblinear"`</span>, <span class="in">`"saga"`</span>) – this is analogous to an *engine*.</span>
-<span id="cb30-298"><a href="#cb30-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-299"><a href="#cb30-299" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.2 Probabilities and log-odds (logits)</span></span>
-<span id="cb30-300"><a href="#cb30-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-301"><a href="#cb30-301" aria-hidden="true" tabindex="-1"></a>We can access predicted probabilities with <span class="in">`predict_proba`</span>:</span>
-<span id="cb30-302"><a href="#cb30-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-305"><a href="#cb30-305" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-306"><a href="#cb30-306" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
-<span id="cb30-307"><a href="#cb30-307" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> log_reg.predict_proba(X_test)</span>
-<span id="cb30-308"><a href="#cb30-308" aria-hidden="true" tabindex="-1"></a>y_proba[:<span class="dv">5</span>]</span>
-<span id="cb30-309"><a href="#cb30-309" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-310"><a href="#cb30-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-311"><a href="#cb30-311" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Column 0 = <span class="sc">\(</span>P(\text{class 0} \mid x)<span class="sc">\)</span>  </span>
-<span id="cb30-312"><a href="#cb30-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Column 1 = <span class="sc">\(</span>P(\text{class 1} \mid x)<span class="sc">\)</span></span>
-<span id="cb30-313"><a href="#cb30-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-314"><a href="#cb30-314" aria-hidden="true" tabindex="-1"></a>The underlying **logits** (log-odds) are related to these probabilities via the logistic function.</span>
-<span id="cb30-315"><a href="#cb30-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-316"><a href="#cb30-316" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb30-317"><a href="#cb30-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-318"><a href="#cb30-318" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Pipelines: tidymodels workflows vs scikit-learn Pipeline</span></span>
-<span id="cb30-319"><a href="#cb30-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-320"><a href="#cb30-320" aria-hidden="true" tabindex="-1"></a>Both ecosystems support **pipelines** to chain preprocessing + model in a leak-free way.</span>
-<span id="cb30-321"><a href="#cb30-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-322"><a href="#cb30-322" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.1 Tidymodels workflow (R)</span></span>
-<span id="cb30-323"><a href="#cb30-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-324"><a href="#cb30-324" aria-hidden="true" tabindex="-1"></a>We already saw:</span>
-<span id="cb30-325"><a href="#cb30-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-328"><a href="#cb30-328" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb30-329"><a href="#cb30-329" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
-<span id="cb30-330"><a href="#cb30-330" aria-hidden="true" tabindex="-1"></a>log_recipe <span class="ot">&lt;-</span></span>
-<span id="cb30-331"><a href="#cb30-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(diabetes <span class="sc">~</span> glucose <span class="sc">+</span> age <span class="sc">+</span> mass, <span class="at">data =</span> pima) <span class="sc">%&gt;%</span></span>
-<span id="cb30-332"><a href="#cb30-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>())</span>
-<span id="cb30-333"><a href="#cb30-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-334"><a href="#cb30-334" aria-hidden="true" tabindex="-1"></a>logistic_spec <span class="ot">&lt;-</span></span>
-<span id="cb30-335"><a href="#cb30-335" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-336"><a href="#cb30-336" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>)</span>
-<span id="cb30-337"><a href="#cb30-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-338"><a href="#cb30-338" aria-hidden="true" tabindex="-1"></a>log_workflow <span class="ot">&lt;-</span></span>
-<span id="cb30-339"><a href="#cb30-339" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb30-340"><a href="#cb30-340" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(logistic_spec) <span class="sc">%&gt;%</span></span>
-<span id="cb30-341"><a href="#cb30-341" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(log_recipe)</span>
-<span id="cb30-342"><a href="#cb30-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-343"><a href="#cb30-343" aria-hidden="true" tabindex="-1"></a>log_fit_multi <span class="ot">&lt;-</span> <span class="fu">fit</span>(log_workflow, <span class="at">data =</span> pima)</span>
-<span id="cb30-344"><a href="#cb30-344" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-345"><a href="#cb30-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-346"><a href="#cb30-346" aria-hidden="true" tabindex="-1"></a>Here:</span>
-<span id="cb30-347"><a href="#cb30-347" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-348"><a href="#cb30-348" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`recipe`</span> = **preprocessing steps**  </span>
-<span id="cb30-349"><a href="#cb30-349" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`logistic_spec`</span> = **model specification + engine**  </span>
-<span id="cb30-350"><a href="#cb30-350" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`workflow`</span> = **pipeline object** (prep + fit together)</span>
-<span id="cb30-351"><a href="#cb30-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-352"><a href="#cb30-352" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.2 Scikit-learn Pipeline (Python)</span></span>
-<span id="cb30-353"><a href="#cb30-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-354"><a href="#cb30-354" aria-hidden="true" tabindex="-1"></a>The scikit-learn equivalent uses <span class="in">`Pipeline`</span> and transformers:</span>
-<span id="cb30-355"><a href="#cb30-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-358"><a href="#cb30-358" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb30-359"><a href="#cb30-359" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
-<span id="cb30-360"><a href="#cb30-360" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
-<span id="cb30-361"><a href="#cb30-361" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb30-362"><a href="#cb30-362" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb30-363"><a href="#cb30-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-364"><a href="#cb30-364" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> Pipeline([</span>
-<span id="cb30-365"><a href="#cb30-365" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"scale"</span>, StandardScaler()),          <span class="co"># preprocessing step</span></span>
-<span id="cb30-366"><a href="#cb30-366" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"log_reg"</span>, LogisticRegression(</span>
-<span id="cb30-367"><a href="#cb30-367" aria-hidden="true" tabindex="-1"></a>    max_iter<span class="op">=</span><span class="dv">1000</span>,</span>
-<span id="cb30-368"><a href="#cb30-368" aria-hidden="true" tabindex="-1"></a>    solver<span class="op">=</span><span class="st">"liblinear"</span></span>
-<span id="cb30-369"><a href="#cb30-369" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb30-370"><a href="#cb30-370" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb30-371"><a href="#cb30-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-372"><a href="#cb30-372" aria-hidden="true" tabindex="-1"></a>pipe.fit(X_train, y_train)</span>
-<span id="cb30-373"><a href="#cb30-373" aria-hidden="true" tabindex="-1"></a>pipe.score(X_test, y_test)</span>
-<span id="cb30-374"><a href="#cb30-374" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb30-375"><a href="#cb30-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-376"><a href="#cb30-376" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`StandardScaler()`</span> = transformer (similar to <span class="in">`step_normalize`</span>)  </span>
-<span id="cb30-377"><a href="#cb30-377" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LogisticRegression()`</span> = estimator (similar role to <span class="in">`logistic_reg()`</span> + engine <span class="in">`"glm"`</span>)  </span>
-<span id="cb30-378"><a href="#cb30-378" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Pipeline`</span> = links them, ensures the **same transformations** are applied in training and testing.</span>
-<span id="cb30-379"><a href="#cb30-379" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-380"><a href="#cb30-380" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb30-381"><a href="#cb30-381" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-382"><a href="#cb30-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-383"><a href="#cb30-383" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6. Summary: parsnip + tidymodels vs scikit-learn</span></span>
-<span id="cb30-384"><a href="#cb30-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-385"><a href="#cb30-385" aria-hidden="true" tabindex="-1"></a>Both ecosystems share the **same design philosophy**:</span>
-<span id="cb30-386"><a href="#cb30-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-387"><a href="#cb30-387" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Unified interface** for all models  </span>
-<span id="cb30-388"><a href="#cb30-388" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>R: <span class="in">`fit()`</span>, <span class="in">`predict()`</span> on parsnip/workflow objects  </span>
-<span id="cb30-389"><a href="#cb30-389" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Python: <span class="in">`fit()`</span>, <span class="in">`predict()`</span> on estimators</span>
-<span id="cb30-390"><a href="#cb30-390" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-391"><a href="#cb30-391" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-392"><a href="#cb30-392" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Pipelines and tuning are built-in**  </span>
-<span id="cb30-393"><a href="#cb30-393" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Leak-free preprocessing  </span>
-<span id="cb30-394"><a href="#cb30-394" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb30-395"><a href="#cb30-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-396"><a href="#cb30-396" aria-hidden="true" tabindex="-1"></a>This allows you to focus on the **modelling ideas** (classification, regression, evaluation, bias–variance, etc.) instead of constantly fighting with different syntaxes and one-off implementations.</span>
+<div class="sourceCode" id="cb25" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "(0) Unified Modelling Frameworks in R &amp; Python"</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, include=FALSE}</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="co"># one-off setup (if you haven't done it yet)</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="co"># install_miniconda()</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="do">##conda_create(</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="do">##  envname = "hds-python",</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="do">##  python_version = "3.11",</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="do">##  packages = c("numpy", "pandas", "matplotlib", "seaborn", "scikit-learn")</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="do">##)</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="st">"hds-python"</span>, <span class="at">required =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="co">#py_config()</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="co">#conda_install("hds-python", c("jupyter", "plotly"))</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Why frameworks like tidymodels and scikit-learn?</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>In both **R** and **Python**, there are many ways to fit models:</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>R: <span class="in">`lm()`</span>, <span class="in">`glm()`</span>, <span class="in">`rpart()`</span>, <span class="in">`randomForest()`</span>, <span class="in">`xgboost()`</span>, ...</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Python: <span class="in">`statsmodels`</span>, custom NumPy/SciPy code, or many different classes in <span class="in">`sklearn`</span></span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>Each function or class often has its own syntax, argument names and prediction methods.  </span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>This becomes difficult when we want to:</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>swap one model for another,</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>compare models fairly,</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>build **end-to-end pipelines** with preprocessing + model + evaluation,</span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>do **hyperparameter tuning** cleanly and without data leakage.</span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>Two ecosystems help us solve this:</span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**tidymodels** in R  </span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**scikit-learn** in Python</span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>Both provide a **unified, consistent interface** for models, preprocessing, pipelines and tuning.</span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Tidymodels (R): model *specification* + *engine*</span></span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>**Docs:**  </span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Getting started with tidymodels: <span class="ot">&lt;https://www.tidymodels.org/start/&gt;</span>  </span>
+<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>parsnip reference (all ML models available): <span class="ot">&lt;https://parsnip.tidymodels.org/reference/index.html&gt;</span></span>
+<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a>In **tidymodels**, we separate:</span>
+<span id="cb25-63"><a href="#cb25-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-64"><a href="#cb25-64" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**What kind of model we want** → the *specification*  </span>
+<span id="cb25-65"><a href="#cb25-65" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**How it is implemented** → the *engine*</span>
+<span id="cb25-66"><a href="#cb25-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-67"><a href="#cb25-67" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1 Model specification</span></span>
+<span id="cb25-68"><a href="#cb25-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-69"><a href="#cb25-69" aria-hidden="true" tabindex="-1"></a>We declare high-level models like this (classification / regression only, no engine yet):</span>
+<span id="cb25-70"><a href="#cb25-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-71"><a href="#cb25-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, message=FALSE, warning=FALSE}</span></span>
+<span id="cb25-72"><a href="#cb25-72" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
+<span id="cb25-73"><a href="#cb25-73" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb25-74"><a href="#cb25-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-75"><a href="#cb25-75" aria-hidden="true" tabindex="-1"></a>log_spec   <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>)</span>
+<span id="cb25-76"><a href="#cb25-76" aria-hidden="true" tabindex="-1"></a>tree_spec  <span class="ot">&lt;-</span> <span class="fu">decision_tree</span>(<span class="at">mode =</span> <span class="st">"classification"</span>)</span>
+<span id="cb25-77"><a href="#cb25-77" aria-hidden="true" tabindex="-1"></a>rf_spec    <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(<span class="at">mode =</span> <span class="st">"regression"</span>)</span>
+<span id="cb25-78"><a href="#cb25-78" aria-hidden="true" tabindex="-1"></a>knn_spec   <span class="ot">&lt;-</span> <span class="fu">nearest_neighbor</span>(<span class="at">mode =</span> <span class="st">"classification"</span>)</span>
+<span id="cb25-79"><a href="#cb25-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-80"><a href="#cb25-80" aria-hidden="true" tabindex="-1"></a>log_spec</span>
+<span id="cb25-81"><a href="#cb25-81" aria-hidden="true" tabindex="-1"></a>tree_spec</span>
+<span id="cb25-82"><a href="#cb25-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-83"><a href="#cb25-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-84"><a href="#cb25-84" aria-hidden="true" tabindex="-1"></a>This does **not** fit a model yet. It just says:</span>
+<span id="cb25-85"><a href="#cb25-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-86"><a href="#cb25-86" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>"I want a logistic regression classifier"</span>
+<span id="cb25-87"><a href="#cb25-87" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>"I want a decision tree for classification"</span>
+<span id="cb25-88"><a href="#cb25-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>etc.</span>
+<span id="cb25-89"><a href="#cb25-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-90"><a href="#cb25-90" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.2 Engines: how the model is actually fit</span></span>
+<span id="cb25-91"><a href="#cb25-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-92"><a href="#cb25-92" aria-hidden="true" tabindex="-1"></a>The **engine** is the backend algorithm. We choose it with <span class="in">`set_engine()`</span>:</span>
+<span id="cb25-93"><a href="#cb25-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-96"><a href="#cb25-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-97"><a href="#cb25-97" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
+<span id="cb25-98"><a href="#cb25-98" aria-hidden="true" tabindex="-1"></a>log_spec_glm <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-99"><a href="#cb25-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>)      <span class="co"># uses base R glm() with binomial family</span></span>
+<span id="cb25-100"><a href="#cb25-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-101"><a href="#cb25-101" aria-hidden="true" tabindex="-1"></a>log_spec_glmnet <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-102"><a href="#cb25-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)   <span class="co"># uses penalised regression (elastic net)</span></span>
+<span id="cb25-103"><a href="#cb25-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-104"><a href="#cb25-104" aria-hidden="true" tabindex="-1"></a>tree_spec_rpart <span class="ot">&lt;-</span> <span class="fu">decision_tree</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-105"><a href="#cb25-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"rpart"</span>)    <span class="co"># uses rpart (CART)</span></span>
+<span id="cb25-106"><a href="#cb25-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-107"><a href="#cb25-107" aria-hidden="true" tabindex="-1"></a>boost_spec_xgb <span class="ot">&lt;-</span> <span class="fu">boost_tree</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-108"><a href="#cb25-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"xgboost"</span>)  <span class="co"># uses xgboost library</span></span>
+<span id="cb25-109"><a href="#cb25-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-110"><a href="#cb25-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-111"><a href="#cb25-111" aria-hidden="true" tabindex="-1"></a>Different **engines** = different **algorithms** for the same *kind* of model.</span>
+<span id="cb25-112"><a href="#cb25-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-113"><a href="#cb25-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.3 Fitting a logistic regression model with tidymodels</span></span>
+<span id="cb25-114"><a href="#cb25-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-115"><a href="#cb25-115" aria-hidden="true" tabindex="-1"></a>Below we use the Pima Indians diabetes data and compare to the <span class="in">`glm()`</span> style you already know.</span>
+<span id="cb25-116"><a href="#cb25-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-119"><a href="#cb25-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-120"><a href="#cb25-120" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
+<span id="cb25-121"><a href="#cb25-121" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbench)</span>
+<span id="cb25-122"><a href="#cb25-122" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"PimaIndiansDiabetes"</span>)</span>
+<span id="cb25-123"><a href="#cb25-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-124"><a href="#cb25-124" aria-hidden="true" tabindex="-1"></a>pima <span class="ot">&lt;-</span> PimaIndiansDiabetes <span class="sc">%&gt;%</span></span>
+<span id="cb25-125"><a href="#cb25-125" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(glucose, mass, age, diabetes) <span class="sc">%&gt;%</span></span>
+<span id="cb25-126"><a href="#cb25-126" aria-hidden="true" tabindex="-1"></a>  <span class="co"># we want "pos" (diabetes present) as the event of interest</span></span>
+<span id="cb25-127"><a href="#cb25-127" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">diabetes =</span> forcats<span class="sc">::</span><span class="fu">fct_relevel</span>(diabetes, <span class="st">"pos"</span>)) <span class="co"># here we are saying that what we are trying to predict (i=our positive, 1 class is "pos")</span></span>
+<span id="cb25-128"><a href="#cb25-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-129"><a href="#cb25-129" aria-hidden="true" tabindex="-1"></a>split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(pima, <span class="at">prop =</span> <span class="fl">0.8</span>, <span class="at">strata =</span> diabetes)</span>
+<span id="cb25-130"><a href="#cb25-130" aria-hidden="true" tabindex="-1"></a>pima_train <span class="ot">&lt;-</span> <span class="fu">training</span>(split)</span>
+<span id="cb25-131"><a href="#cb25-131" aria-hidden="true" tabindex="-1"></a>pima_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(split)</span>
+<span id="cb25-132"><a href="#cb25-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-133"><a href="#cb25-133" aria-hidden="true" tabindex="-1"></a><span class="co"># Model spec + engine</span></span>
+<span id="cb25-134"><a href="#cb25-134" aria-hidden="true" tabindex="-1"></a>logistic_spec <span class="ot">&lt;-</span></span>
+<span id="cb25-135"><a href="#cb25-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-136"><a href="#cb25-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>)   <span class="co"># internally: glm(..., family = binomial)</span></span>
+<span id="cb25-137"><a href="#cb25-137" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-138"><a href="#cb25-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-139"><a href="#cb25-139" aria-hidden="true" tabindex="-1"></a>Fit the model using <span class="in">`fit()`</span> with a formula interface:</span>
+<span id="cb25-140"><a href="#cb25-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-143"><a href="#cb25-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-144"><a href="#cb25-144" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
+<span id="cb25-145"><a href="#cb25-145" aria-hidden="true" tabindex="-1"></a>logistic_fit <span class="ot">&lt;-</span></span>
+<span id="cb25-146"><a href="#cb25-146" aria-hidden="true" tabindex="-1"></a>  logistic_spec <span class="sc">%&gt;%</span></span>
+<span id="cb25-147"><a href="#cb25-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(diabetes <span class="sc">~</span> glucose, <span class="at">data =</span> pima_train)</span>
+<span id="cb25-148"><a href="#cb25-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-149"><a href="#cb25-149" aria-hidden="true" tabindex="-1"></a>logistic_fit</span>
+<span id="cb25-150"><a href="#cb25-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-151"><a href="#cb25-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-152"><a href="#cb25-152" aria-hidden="true" tabindex="-1"></a>Inspect the coefficients (these are **log-odds / logit** coefficients):</span>
+<span id="cb25-153"><a href="#cb25-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-156"><a href="#cb25-156" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-157"><a href="#cb25-157" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
+<span id="cb25-158"><a href="#cb25-158" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(logistic_fit)</span>
+<span id="cb25-159"><a href="#cb25-159" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-160"><a href="#cb25-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-161"><a href="#cb25-161" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.4 Making predictions in a consistent way</span></span>
+<span id="cb25-162"><a href="#cb25-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-163"><a href="#cb25-163" aria-hidden="true" tabindex="-1"></a>All parsnip models support the same <span class="in">`predict()`</span> interface:</span>
+<span id="cb25-164"><a href="#cb25-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-167"><a href="#cb25-167" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-168"><a href="#cb25-168" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
+<span id="cb25-169"><a href="#cb25-169" aria-hidden="true" tabindex="-1"></a>pima_preds <span class="ot">&lt;-</span></span>
+<span id="cb25-170"><a href="#cb25-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(logistic_fit, <span class="at">new_data =</span> pima_test, <span class="at">type =</span> <span class="st">"prob"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-171"><a href="#cb25-171" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_cols</span>(pima_test)</span>
+<span id="cb25-172"><a href="#cb25-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-173"><a href="#cb25-173" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pima_preds)</span>
+<span id="cb25-174"><a href="#cb25-174" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-175"><a href="#cb25-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-176"><a href="#cb25-176" aria-hidden="true" tabindex="-1"></a>We can visualise predicted probability vs. glucose:</span>
+<span id="cb25-177"><a href="#cb25-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-180"><a href="#cb25-180" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-181"><a href="#cb25-181" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
+<span id="cb25-182"><a href="#cb25-182" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb25-183"><a href="#cb25-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-184"><a href="#cb25-184" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pima_preds, <span class="fu">aes</span>(<span class="at">x =</span> glucose, <span class="at">y =</span> .pred_pos)) <span class="sc">+</span></span>
+<span id="cb25-185"><a href="#cb25-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb25-186"><a href="#cb25-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb25-187"><a href="#cb25-187" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Glucose"</span>,</span>
+<span id="cb25-188"><a href="#cb25-188" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Predicted probability of diabetes (pos)"</span></span>
+<span id="cb25-189"><a href="#cb25-189" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb25-190"><a href="#cb25-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb25-191"><a href="#cb25-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-192"><a href="#cb25-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-193"><a href="#cb25-193" aria-hidden="true" tabindex="-1"></a>Here:</span>
+<span id="cb25-194"><a href="#cb25-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-195"><a href="#cb25-195" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`.pred_pos`</span> = predicted <span class="sc">\(</span> P(\text{diabetes} = \text{"pos"}) <span class="sc">\)</span></span>
+<span id="cb25-196"><a href="#cb25-196" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`.pred_neg`</span> (not shown here) = predicted <span class="sc">\(</span> P(\text{"neg"}) <span class="sc">\)</span></span>
+<span id="cb25-197"><a href="#cb25-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-198"><a href="#cb25-198" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.5 Recipes + workflows (pipelines in tidymodels)</span></span>
+<span id="cb25-199"><a href="#cb25-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-200"><a href="#cb25-200" aria-hidden="true" tabindex="-1"></a>Tidymodels also includes tools for **preprocessing** and **pipelines**:</span>
+<span id="cb25-201"><a href="#cb25-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-202"><a href="#cb25-202" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`recipes`</span> → scaling, imputation, one-hot encoding, etc.  </span>
+<span id="cb25-203"><a href="#cb25-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`workflows`</span> → combine a model + recipe into a single object</span>
+<span id="cb25-204"><a href="#cb25-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-207"><a href="#cb25-207" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-208"><a href="#cb25-208" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
+<span id="cb25-209"><a href="#cb25-209" aria-hidden="true" tabindex="-1"></a>log_recipe <span class="ot">&lt;-</span></span>
+<span id="cb25-210"><a href="#cb25-210" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(diabetes <span class="sc">~</span> glucose <span class="sc">+</span> age <span class="sc">+</span> mass, <span class="at">data =</span> pima) <span class="sc">%&gt;%</span></span>
+<span id="cb25-211"><a href="#cb25-211" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>())</span>
+<span id="cb25-212"><a href="#cb25-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-213"><a href="#cb25-213" aria-hidden="true" tabindex="-1"></a>log_workflow <span class="ot">&lt;-</span></span>
+<span id="cb25-214"><a href="#cb25-214" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb25-215"><a href="#cb25-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(logistic_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb25-216"><a href="#cb25-216" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(log_recipe)</span>
+<span id="cb25-217"><a href="#cb25-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-218"><a href="#cb25-218" aria-hidden="true" tabindex="-1"></a>log_fit_multi <span class="ot">&lt;-</span> <span class="fu">fit</span>(log_workflow, <span class="at">data =</span> pima)</span>
+<span id="cb25-219"><a href="#cb25-219" aria-hidden="true" tabindex="-1"></a>log_fit_multi</span>
+<span id="cb25-220"><a href="#cb25-220" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-221"><a href="#cb25-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-222"><a href="#cb25-222" aria-hidden="true" tabindex="-1"></a>Notice, when we open in our environment the model created, it includes too, the preprocessing information!</span>
+<span id="cb25-223"><a href="#cb25-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-224"><a href="#cb25-224" aria-hidden="true" tabindex="-1"></a>This is similar in spirit to **scikit-learn pipelines**. </span>
+<span id="cb25-225"><a href="#cb25-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-226"><a href="#cb25-226" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb25-227"><a href="#cb25-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-228"><a href="#cb25-228" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Scikit-learn (Python): unified estimator API</span></span>
+<span id="cb25-229"><a href="#cb25-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-230"><a href="#cb25-230" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb25-231"><a href="#cb25-231" aria-hidden="true" tabindex="-1"></a>**Docs:**  </span>
+<span id="cb25-232"><a href="#cb25-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Scikit-learn homepage: <span class="ot">&lt;https://scikit-learn.org/stable/&gt;</span>  </span>
+<span id="cb25-233"><a href="#cb25-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>User guide: <span class="ot">&lt;https://scikit-learn.org/stable/user_guide.html&gt;</span>  </span>
+<span id="cb25-234"><a href="#cb25-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>API overview: <span class="ot">&lt;https://scikit-learn.org/stable/developers/develop.html#apis-of-scikit-learn-objects&gt;</span></span>
+<span id="cb25-235"><a href="#cb25-235" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb25-236"><a href="#cb25-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-237"><a href="#cb25-237" aria-hidden="true" tabindex="-1"></a>In **scikit-learn**, all models follow the same **estimator API**:</span>
+<span id="cb25-238"><a href="#cb25-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-239"><a href="#cb25-239" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb25-240"><a href="#cb25-240" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> SomeEstimator(hyperparameters)</span>
+<span id="cb25-241"><a href="#cb25-241" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span>
+<span id="cb25-242"><a href="#cb25-242" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> model.predict(X_test)</span>
+<span id="cb25-243"><a href="#cb25-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-244"><a href="#cb25-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-245"><a href="#cb25-245" aria-hidden="true" tabindex="-1"></a>Examples:</span>
+<span id="cb25-246"><a href="#cb25-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-247"><a href="#cb25-247" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LinearRegression`</span> (ordinary least squares)</span>
+<span id="cb25-248"><a href="#cb25-248" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LogisticRegression`</span> (classification)</span>
+<span id="cb25-249"><a href="#cb25-249" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`DecisionTreeClassifier`</span></span>
+<span id="cb25-250"><a href="#cb25-250" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`RandomForestClassifier`</span></span>
+<span id="cb25-251"><a href="#cb25-251" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`SVC`</span> (support vector classifier)</span>
+<span id="cb25-252"><a href="#cb25-252" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`KNeighborsClassifier`</span></span>
+<span id="cb25-253"><a href="#cb25-253" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`MLPClassifier`</span> (neural network)</span>
+<span id="cb25-254"><a href="#cb25-254" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Preprocessors like <span class="in">`StandardScaler`</span>, <span class="in">`OneHotEncoder`</span></span>
+<span id="cb25-255"><a href="#cb25-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-256"><a href="#cb25-256" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.1 A simple logistic regression in scikit-learn</span></span>
+<span id="cb25-257"><a href="#cb25-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-260"><a href="#cb25-260" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb25-261"><a href="#cb25-261" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
+<span id="cb25-262"><a href="#cb25-262" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
+<span id="cb25-263"><a href="#cb25-263" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb25-264"><a href="#cb25-264" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb25-265"><a href="#cb25-265" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
+<span id="cb25-266"><a href="#cb25-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-267"><a href="#cb25-267" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb25-268"><a href="#cb25-268" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> load_breast_cancer()</span>
+<span id="cb25-269"><a href="#cb25-269" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data.data</span>
+<span id="cb25-270"><a href="#cb25-270" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> data.target   <span class="co"># 0 = malignant, 1 = benign</span></span>
+<span id="cb25-271"><a href="#cb25-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-272"><a href="#cb25-272" aria-hidden="true" tabindex="-1"></a><span class="co"># Train / test split</span></span>
+<span id="cb25-273"><a href="#cb25-273" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb25-274"><a href="#cb25-274" aria-hidden="true" tabindex="-1"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y</span>
+<span id="cb25-275"><a href="#cb25-275" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-276"><a href="#cb25-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-277"><a href="#cb25-277" aria-hidden="true" tabindex="-1"></a><span class="co"># Define model (specification)</span></span>
+<span id="cb25-278"><a href="#cb25-278" aria-hidden="true" tabindex="-1"></a>log_reg <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb25-279"><a href="#cb25-279" aria-hidden="true" tabindex="-1"></a>    solver<span class="op">=</span><span class="st">"liblinear"</span>)</span>
+<span id="cb25-280"><a href="#cb25-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-281"><a href="#cb25-281" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit model</span></span>
+<span id="cb25-282"><a href="#cb25-282" aria-hidden="true" tabindex="-1"></a>log_reg.fit(X_train, y_train)</span>
+<span id="cb25-283"><a href="#cb25-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-284"><a href="#cb25-284" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb25-285"><a href="#cb25-285" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> log_reg.predict(X_test)</span>
+<span id="cb25-286"><a href="#cb25-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-287"><a href="#cb25-287" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-288"><a href="#cb25-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-289"><a href="#cb25-289" aria-hidden="true" tabindex="-1"></a>Here:</span>
+<span id="cb25-290"><a href="#cb25-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-291"><a href="#cb25-291" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LogisticRegression(...)`</span> = model specification (similar to <span class="in">`logistic_reg()`</span> in parsnip)</span>
+<span id="cb25-292"><a href="#cb25-292" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Under the hood, it calls a numerical **solver** (e.g. <span class="in">`"lbfgs"`</span>, <span class="in">`"liblinear"`</span>, <span class="in">`"saga"`</span>) – this is analogous to an *engine*.</span>
+<span id="cb25-293"><a href="#cb25-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-294"><a href="#cb25-294" aria-hidden="true" tabindex="-1"></a><span class="fu">### 3.2 Probabilities and log-odds (logits)</span></span>
+<span id="cb25-295"><a href="#cb25-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-296"><a href="#cb25-296" aria-hidden="true" tabindex="-1"></a>We can access predicted probabilities with <span class="in">`predict_proba`</span>:</span>
+<span id="cb25-297"><a href="#cb25-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-300"><a href="#cb25-300" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb25-301"><a href="#cb25-301" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
+<span id="cb25-302"><a href="#cb25-302" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> log_reg.predict_proba(X_test)</span>
+<span id="cb25-303"><a href="#cb25-303" aria-hidden="true" tabindex="-1"></a>y_proba[:<span class="dv">5</span>]</span>
+<span id="cb25-304"><a href="#cb25-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-305"><a href="#cb25-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-306"><a href="#cb25-306" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Column 0 = <span class="sc">\(</span>P(\text{class 0} \mid x)<span class="sc">\)</span>  </span>
+<span id="cb25-307"><a href="#cb25-307" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Column 1 = <span class="sc">\(</span>P(\text{class 1} \mid x)<span class="sc">\)</span></span>
+<span id="cb25-308"><a href="#cb25-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-309"><a href="#cb25-309" aria-hidden="true" tabindex="-1"></a>The underlying **logits** (log-odds) are related to these probabilities via the logistic function.</span>
+<span id="cb25-310"><a href="#cb25-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-311"><a href="#cb25-311" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb25-312"><a href="#cb25-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-313"><a href="#cb25-313" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Pipelines: tidymodels workflows vs scikit-learn Pipeline</span></span>
+<span id="cb25-314"><a href="#cb25-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-315"><a href="#cb25-315" aria-hidden="true" tabindex="-1"></a>Both ecosystems support **pipelines** to chain preprocessing + model in a leak-free way.</span>
+<span id="cb25-316"><a href="#cb25-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-317"><a href="#cb25-317" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.1 Tidymodels workflow (R)</span></span>
+<span id="cb25-318"><a href="#cb25-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-319"><a href="#cb25-319" aria-hidden="true" tabindex="-1"></a>We already saw:</span>
+<span id="cb25-320"><a href="#cb25-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-323"><a href="#cb25-323" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb25-324"><a href="#cb25-324" aria-hidden="true" tabindex="-1"></a><span class="co">#R</span></span>
+<span id="cb25-325"><a href="#cb25-325" aria-hidden="true" tabindex="-1"></a>log_recipe <span class="ot">&lt;-</span></span>
+<span id="cb25-326"><a href="#cb25-326" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(diabetes <span class="sc">~</span> glucose <span class="sc">+</span> age <span class="sc">+</span> mass, <span class="at">data =</span> pima) <span class="sc">%&gt;%</span></span>
+<span id="cb25-327"><a href="#cb25-327" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>())</span>
+<span id="cb25-328"><a href="#cb25-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-329"><a href="#cb25-329" aria-hidden="true" tabindex="-1"></a>logistic_spec <span class="ot">&lt;-</span></span>
+<span id="cb25-330"><a href="#cb25-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">logistic_reg</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-331"><a href="#cb25-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>)</span>
+<span id="cb25-332"><a href="#cb25-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-333"><a href="#cb25-333" aria-hidden="true" tabindex="-1"></a>log_workflow <span class="ot">&lt;-</span></span>
+<span id="cb25-334"><a href="#cb25-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb25-335"><a href="#cb25-335" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(logistic_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb25-336"><a href="#cb25-336" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(log_recipe)</span>
+<span id="cb25-337"><a href="#cb25-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-338"><a href="#cb25-338" aria-hidden="true" tabindex="-1"></a>log_fit_multi <span class="ot">&lt;-</span> <span class="fu">fit</span>(log_workflow, <span class="at">data =</span> pima)</span>
+<span id="cb25-339"><a href="#cb25-339" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-340"><a href="#cb25-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-341"><a href="#cb25-341" aria-hidden="true" tabindex="-1"></a>Here:</span>
+<span id="cb25-342"><a href="#cb25-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-343"><a href="#cb25-343" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`recipe`</span> = **preprocessing steps**  </span>
+<span id="cb25-344"><a href="#cb25-344" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`logistic_spec`</span> = **model specification + engine**  </span>
+<span id="cb25-345"><a href="#cb25-345" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`workflow`</span> = **pipeline object** (prep + fit together)</span>
+<span id="cb25-346"><a href="#cb25-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-347"><a href="#cb25-347" aria-hidden="true" tabindex="-1"></a><span class="fu">### 4.2 Scikit-learn Pipeline (Python)</span></span>
+<span id="cb25-348"><a href="#cb25-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-349"><a href="#cb25-349" aria-hidden="true" tabindex="-1"></a>The scikit-learn equivalent uses <span class="in">`Pipeline`</span> and transformers:</span>
+<span id="cb25-350"><a href="#cb25-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-353"><a href="#cb25-353" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb25-354"><a href="#cb25-354" aria-hidden="true" tabindex="-1"></a><span class="co">#Python</span></span>
+<span id="cb25-355"><a href="#cb25-355" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb25-356"><a href="#cb25-356" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb25-357"><a href="#cb25-357" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb25-358"><a href="#cb25-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-359"><a href="#cb25-359" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> Pipeline([</span>
+<span id="cb25-360"><a href="#cb25-360" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"scale"</span>, StandardScaler()),          <span class="co"># preprocessing step</span></span>
+<span id="cb25-361"><a href="#cb25-361" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"log_reg"</span>, LogisticRegression(</span>
+<span id="cb25-362"><a href="#cb25-362" aria-hidden="true" tabindex="-1"></a>    max_iter<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb25-363"><a href="#cb25-363" aria-hidden="true" tabindex="-1"></a>    solver<span class="op">=</span><span class="st">"liblinear"</span></span>
+<span id="cb25-364"><a href="#cb25-364" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb25-365"><a href="#cb25-365" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb25-366"><a href="#cb25-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-367"><a href="#cb25-367" aria-hidden="true" tabindex="-1"></a>pipe.fit(X_train, y_train)</span>
+<span id="cb25-368"><a href="#cb25-368" aria-hidden="true" tabindex="-1"></a>pipe.score(X_test, y_test)</span>
+<span id="cb25-369"><a href="#cb25-369" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb25-370"><a href="#cb25-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-371"><a href="#cb25-371" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`StandardScaler()`</span> = transformer (similar to <span class="in">`step_normalize`</span>)  </span>
+<span id="cb25-372"><a href="#cb25-372" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`LogisticRegression()`</span> = estimator (similar role to <span class="in">`logistic_reg()`</span> + engine <span class="in">`"glm"`</span>)  </span>
+<span id="cb25-373"><a href="#cb25-373" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Pipeline`</span> = links them, ensures the **same transformations** are applied in training and testing.</span>
+<span id="cb25-374"><a href="#cb25-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-375"><a href="#cb25-375" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb25-376"><a href="#cb25-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-377"><a href="#cb25-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-378"><a href="#cb25-378" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Summary: parsnip + tidymodels vs scikit-learn</span></span>
+<span id="cb25-379"><a href="#cb25-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-380"><a href="#cb25-380" aria-hidden="true" tabindex="-1"></a>Both ecosystems share the **same design philosophy**:</span>
+<span id="cb25-381"><a href="#cb25-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-382"><a href="#cb25-382" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Unified interface** for all models  </span>
+<span id="cb25-383"><a href="#cb25-383" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>R: <span class="in">`fit()`</span>, <span class="in">`predict()`</span> on parsnip/workflow objects  </span>
+<span id="cb25-384"><a href="#cb25-384" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Python: <span class="in">`fit()`</span>, <span class="in">`predict()`</span> on estimators</span>
+<span id="cb25-385"><a href="#cb25-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-386"><a href="#cb25-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-387"><a href="#cb25-387" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Pipelines and tuning are built-in**  </span>
+<span id="cb25-388"><a href="#cb25-388" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Leak-free preprocessing  </span>
+<span id="cb25-389"><a href="#cb25-389" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-390"><a href="#cb25-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-391"><a href="#cb25-391" aria-hidden="true" tabindex="-1"></a>This allows you to focus on the **modelling ideas** (classification, regression, evaluation, bias–variance, etc.) instead of constantly fighting with different syntaxes and one-off implementations.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
