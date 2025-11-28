@@ -16,5 +16,23 @@
   },
   "LogisticRegression.qmd": {
     "LogisticRegression.html": "e59cd7fe"
+  },
+  "1_EvaluationMetrics.qmd": {
+    "1_EvaluationMetrics.html": "bb150c6d"
+  },
+  "2_EvaluationMetrics.qmd": {
+    "2_EvaluationMetrics.html": "cd3d0170"
+  },
+  "3_Confusion.qmd": {
+    "3_Confusion.html": "8d809f16"
+  },
+  "logistic_regression_python.qmd": {
+    "logistic_regression_python.html": "bd2a2565"
+  },
+  "logistic_regression_tidymodels.qmd": {
+    "logistic_regression_tidymodels.html": "c1c6b50b"
+  },
+  "tidymodels_sklearn_overview.qmd": {
+    "tidymodels_sklearn_overview.html": "9cdf4f11"
   }
 }

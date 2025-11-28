@@ -1,0 +1,370 @@
+---
+title: "(0) Unified Modelling Frameworks in R & Python"
+format:
+  html:
+    toc: true
+execute:
+  echo: true
+  message: false
+---
+
+```{r}
+library(reticulate)
+
+# one-off setup (if you haven't done it yet)
+# install_miniconda()
+
+##conda_create(
+##  envname = "hds-python",
+##  python_version = "3.11",
+##  packages = c("numpy", "pandas", "matplotlib", "seaborn", "scikit-learn")
+##)
+
+use_condaenv("hds-python", required = TRUE)
+#py_config()
+
+#conda_install("hds-python", c("jupyter", "plotly"))
+```
+
+
+## 1. Why frameworks like tidymodels and scikit-learn?
+
+In both **R** and **Python**, there are many ways to fit models:
+
+- R: `lm()`, `glm()`, `rpart()`, `randomForest()`, `xgboost()`, ...
+- Python: `statsmodels`, custom NumPy/SciPy code, or many different classes in `sklearn`
+
+Each function or class often has its own syntax, argument names and prediction methods.  
+This becomes difficult when we want to:
+
+- swap one model for another,
+- compare models fairly,
+- build **end-to-end pipelines** with preprocessing + model + evaluation,
+- do **hyperparameter tuning** cleanly and without data leakage.
+
+Two ecosystems help us solve this:
+
+- **tidymodels** in R  
+- **scikit-learn** in Python
+
+Both provide a **unified, consistent interface** for models, preprocessing, pipelines and tuning.
+
+---
+
+## 2. Tidymodels (R): model *specification* + *engine*
+
+::: callout-note
+**Docs:**  
+- Tidymodels homepage: <https://www.tidymodels.org/>  
+- Getting started: <https://www.tidymodels.org/start/>  
+- parsnip reference: <https://parsnip.tidymodels.org/reference/index.html>
+:::
+
+In **tidymodels**, we separate:
+
+1. **What kind of model we want** → the *specification*  
+2. **How it is implemented** → the *engine*
+
+### 2.1 Model specification
+
+We declare high-level models like this (classification / regression only, no engine yet):
+
+```{r}
+#R
+library(tidymodels)
+
+log_spec   <- logistic_reg(mode = "classification")
+tree_spec  <- decision_tree(mode = "classification")
+rf_spec    <- rand_forest(mode = "regression")
+knn_spec   <- nearest_neighbor(mode = "classification")
+
+log_spec
+tree_spec
+```
+
+This does **not** fit a model yet. It just says:
+
+- "I want a logistic regression classifier"
+- "I want a decision tree for classification"
+- etc.
+
+### 2.2 Engines: how the model is actually fit
+
+The **engine** is the backend algorithm. We choose it with `set_engine()`:
+
+```{r}
+#R
+log_spec_glm <- logistic_reg(mode = "classification") %>%
+  set_engine("glm")      # uses base R glm() with binomial family
+
+log_spec_glmnet <- logistic_reg(mode = "classification") %>%
+  set_engine("glmnet")   # uses penalised regression (elastic net)
+
+tree_spec_rpart <- decision_tree(mode = "classification") %>%
+  set_engine("rpart")    # uses rpart (CART)
+
+boost_spec_xgb <- boost_tree(mode = "classification") %>%
+  set_engine("xgboost")  # uses xgboost library
+```
+
+Different **engines** = different **algorithms** for the same *kind* of model.
+
+### 2.3 Fitting a logistic regression model with tidymodels
+
+Below we use the Pima Indians diabetes data and compare to the `glm()` style you already know.
+
+```{r}
+#R
+library(mlbench)
+data("PimaIndiansDiabetes")
+
+pima <- PimaIndiansDiabetes %>%
+  dplyr::select(glucose, mass, age, diabetes) %>%
+  # we want "pos" (diabetes present) as the event of interest
+  dplyr::mutate(diabetes = forcats::fct_relevel(diabetes, "pos")) # here we are saying that what we are trying to predict (i=our positive, 1 class is "pos")
+
+split <- initial_split(pima, prop = 0.8, strata = diabetes)
+pima_train <- training(split)
+pima_test  <- testing(split)
+
+# Model spec + engine
+logistic_spec <-
+  logistic_reg(mode = "classification") %>%
+  set_engine("glm")   # internally: glm(..., family = binomial)
+```
+
+Fit the model using `fit()` with a formula interface:
+
+```{r}
+#R
+logistic_fit <-
+  logistic_spec %>%
+  fit(diabetes ~ glucose, data = pima_train)
+
+logistic_fit
+```
+
+Inspect the coefficients (these are **log-odds / logit** coefficients):
+
+```{r}
+#R
+tidy(logistic_fit)
+```
+
+### 2.4 Making predictions in a consistent way
+
+All parsnip models support the same `predict()` interface:
+
+```{r}
+#R
+pima_preds <-
+  predict(logistic_fit, new_data = pima_test, type = "prob") %>%
+  dplyr::bind_cols(pima_test)
+
+head(pima_preds)
+```
+
+We can visualise predicted probability vs. glucose:
+
+```{r}
+#R
+library(ggplot2)
+
+ggplot(pima_preds, aes(x = glucose, y = .pred_pos)) +
+  geom_point(alpha = 0.4) +
+  labs(
+    x = "Glucose",
+    y = "Predicted probability of diabetes (pos)"
+  ) +
+  theme_minimal()
+```
+
+Here:
+
+- `.pred_pos` = predicted \( P(\text{diabetes} = \text{"pos"}) \)
+- `.pred_neg` (not shown here) = predicted \( P(\text{"neg"}) \)
+
+### 2.5 Recipes + workflows (pipelines in tidymodels)
+
+Tidymodels also includes tools for **preprocessing** and **pipelines**:
+
+- `recipes` → scaling, imputation, one-hot encoding, etc.  
+- `workflows` → combine a model + recipe into a single object
+
+```{r}
+#R
+log_recipe <-
+  recipe(diabetes ~ glucose + age + mass, data = pima) %>%
+  step_normalize(all_numeric_predictors())
+
+log_workflow <-
+  workflow() %>%
+  add_model(logistic_spec) %>%
+  add_recipe(log_recipe)
+
+log_fit_multi <- fit(log_workflow, data = pima)
+log_fit_multi
+```
+
+Notice, when we open in our environment the model created, it includes too, the preprocessing information!
+
+This is similar in spirit to **scikit-learn pipelines**. 
+
+---
+
+## 3. Scikit-learn (Python): unified estimator API
+
+::: callout-note
+**Docs:**  
+- Scikit-learn homepage: <https://scikit-learn.org/stable/>  
+- User guide: <https://scikit-learn.org/stable/user_guide.html>  
+- API overview: <https://scikit-learn.org/stable/developers/develop.html#apis-of-scikit-learn-objects>
+:::
+
+In **scikit-learn**, all models follow the same **estimator API**:
+
+```python
+model = SomeEstimator(hyperparameters)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+```
+
+Examples:
+
+- `LinearRegression` (ordinary least squares)
+- `LogisticRegression` (classification)
+- `DecisionTreeClassifier`
+- `RandomForestClassifier`
+- `SVC` (support vector classifier)
+- `KNeighborsClassifier`
+- `MLPClassifier` (neural network)
+- Preprocessors like `StandardScaler`, `OneHotEncoder`
+
+### 3.1 A simple logistic regression in scikit-learn
+
+```{python}
+#Python
+from sklearn.datasets import load_breast_cancer
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Load data
+data = load_breast_cancer()
+X = data.data
+y = data.target   # 0 = malignant, 1 = benign
+
+# Train / test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42, stratify=y
+)
+
+# Define model (specification)
+log_reg = LogisticRegression(max_iter=1000,
+    solver="liblinear")
+
+# Fit model
+log_reg.fit(X_train, y_train)
+
+# Predict
+y_pred = log_reg.predict(X_test)
+
+```
+
+Here:
+
+- `LogisticRegression(...)` = model specification (similar to `logistic_reg()` in parsnip)
+- Under the hood, it calls a numerical **solver** (e.g. `"lbfgs"`, `"liblinear"`, `"saga"`) – this is analogous to an *engine*.
+
+### 3.2 Probabilities and log-odds (logits)
+
+We can access predicted probabilities with `predict_proba`:
+
+```{python}
+#Python
+y_proba = log_reg.predict_proba(X_test)
+y_proba[:5]
+```
+
+- Column 0 = \(P(\text{class 0} \mid x)\)  
+- Column 1 = \(P(\text{class 1} \mid x)\)
+
+The underlying **logits** (log-odds) are related to these probabilities via the logistic function.
+
+---
+
+## 4. Pipelines: tidymodels workflows vs scikit-learn Pipeline
+
+Both ecosystems support **pipelines** to chain preprocessing + model in a leak-free way.
+
+### 4.1 Tidymodels workflow (R)
+
+We already saw:
+
+```{r}
+#R
+log_recipe <-
+  recipe(diabetes ~ glucose + age + mass, data = pima) %>%
+  step_normalize(all_numeric_predictors())
+
+logistic_spec <-
+  logistic_reg(mode = "classification") %>%
+  set_engine("glm")
+
+log_workflow <-
+  workflow() %>%
+  add_model(logistic_spec) %>%
+  add_recipe(log_recipe)
+
+log_fit_multi <- fit(log_workflow, data = pima)
+```
+
+Here:
+
+- `recipe` = **preprocessing steps**  
+- `logistic_spec` = **model specification + engine**  
+- `workflow` = **pipeline object** (prep + fit together)
+
+### 4.2 Scikit-learn Pipeline (Python)
+
+The scikit-learn equivalent uses `Pipeline` and transformers:
+
+```{python}
+#Python
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+pipe = Pipeline([
+    ("scale", StandardScaler()),          # preprocessing step
+    ("log_reg", LogisticRegression(
+    max_iter=1000,
+    solver="liblinear"
+))
+])
+
+pipe.fit(X_train, y_train)
+pipe.score(X_test, y_test)
+```
+
+- `StandardScaler()` = transformer (similar to `step_normalize`)  
+- `LogisticRegression()` = estimator (similar role to `logistic_reg()` + engine `"glm"`)  
+- `Pipeline` = links them, ensures the **same transformations** are applied in training and testing.
+
+---
+
+
+## 6. Summary: parsnip + tidymodels vs scikit-learn
+
+Both ecosystems share the **same design philosophy**:
+
+1. **Unified interface** for all models  
+   - R: `fit()`, `predict()` on parsnip/workflow objects  
+   - Python: `fit()`, `predict()` on estimators
+
+
+2. **Pipelines and tuning are built-in**  
+   - Leak-free preprocessing  
+  
+
+This allows you to focus on the **modelling ideas** (classification, regression, evaluation, bias–variance, etc.) instead of constantly fighting with different syntaxes and one-off implementations.

@@ -23,20 +23,18 @@ website:
   sidebar:
      - title: "Supervised Learning:Logistic Regression"
        contents:
-         - Basic_Understanding2.qmd
-         - Basic_Understanding_Python.qmd
-         - DecisionThreshold.qmd
-         - Gradients.qmd
-         - LogisticRegression.qmd
+         - tidymodels_sklearn_overview.qmd
+         - logistic_regression_tidymodels.qmd
+         - logistic_regression_python.qmd
+         - decision_threshold.qmd
+         #- Gradients.qmd
+         #- LogisticRegression.qmd
   
   page-footer: 
     left: "Copyright 2025, Laura Bravo" 
     background: light
-    right: 
-      - icon: twitter 
-        href: https://twitter.com/laura_bravo94
-      - icon: github
-        href: https://github.com/LauBra/RIntro2023
+
+
     
 format:
   html:

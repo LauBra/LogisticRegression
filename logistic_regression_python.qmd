@@ -1,0 +1,66 @@
+---
+title: "(1a) Fitting a logistic regression model - Python (scikit-learn)"
+format: html
+execute:
+  echo: true
+  message: false
+---
+
+```{r}
+library(reticulate)
+
+# one-off setup (if you haven't done it yet)
+# install_miniconda()
+
+##conda_create(
+##  envname = "hds-python",
+##  python_version = "3.11",
+##  packages = c("numpy", "pandas", "matplotlib", "seaborn", "scikit-learn")
+##)
+
+use_condaenv("hds-python", required = TRUE)
+#py_config()
+
+#conda_install("hds-python", c("jupyter", "plotly"))
+```
+
+
+## Data: Pima Indians Diabetes
+
+```{python}
+import pandas as pd
+
+
+url="https://raw.githubusercontent.com/npradaschnor/Pima-Indians-Diabetes-Dataset/master/diabetes.csv"
+pima= pd.read_csv(url)
+
+pima = pima[["Glucose", "Outcome", "BloodPressure", "Age"]]
+pima["Diabetes_binary"] = (pima["Outcome"] == 1).astype(int)
+pima.head()
+```
+
+## Logistic regression with scikit-learn
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+
+X = pima[["Glucose"]].values
+y = pima["Diabetes_binary"].values
+
+log_reg = LogisticRegression(solver="lbfgs")
+log_reg.fit(X, y)
+
+log_reg.intercept_, log_reg.coef_
+```
+
+
+## Predictions & plots
+
+```{python}
+probs = log_reg.predict_proba(X)
+pima["prob_diabetes_1"] = probs[:, 1]
+pima["prob_diabetes_0"] = probs[:, 0]
+pima.head()
+```
+
+Which probability column do we want? 
