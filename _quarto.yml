@@ -2,7 +2,10 @@ project:
   type: website
   output-dir: docs    # <- add / change this line
   render: 
-  - "*.qmd"
+  - tidymodels_sklearn_overview.qmd
+  - logistic_regression_tidymodels.qmd
+  - logistic_regression_python.qmd
+  - decision_threshold.qmd
 
 execute:
   echo: true
@@ -18,7 +21,7 @@ website:
     search: true
     left:
       - text: "Supervised Learning:Logistic Regression"
-        file: LogisticRegression.qmd
+        file: tidymodels_sklearn_overview.qmd
  
   sidebar:
      - title: "Supervised Learning:Logistic Regression"
